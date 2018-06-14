@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hunt.dao.SysRoleMenuDao">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.hunt.model.entity.SysRoleMenu">
+        <result column="ID" property="id" />
+        <result column="ROLE_ID" property="roleId" />
+        <result column="MENU_ID" property="menuId" />
+        <result column="MENU_STATE" property="menuState" />
+        <result column="MENU_CREATE_DATE" property="menuCreateDate" />
+        <result column="MENU_UPDATA_DATE" property="menuUpdataDate" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        ID, ROLE_ID, MENU_ID, MENU_STATE, MENU_CREATE_DATE, MENU_UPDATA_DATE
+    </sql>
+
+    <insert id="insert" parameterType="com.hunt.model.entity.SysRoleMenu" >
+        insert into SYS_ROLE_MENU
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id !=null and id.length() !=0 ">
+                id,
+            </if>
+            <if test="roleId !=null and roleId.length() !=0">
+                ROLE_ID,
+            </if>
+            <if test="menuId !=null and menuId.length() !=0">
+                MENU_ID,
+            </if>
+            <if test="menuState !=null">
+                MENU_STATE,
+            </if>
+            <if test="menuCreateDate !=null">
+                MENU_CREATE_DATE,
+            </if>
+            <if test="menuUpdataDate !=null">
+                MENU_UPDATA_DATE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id !=null and id.length() !=0">
+                #{id},
+            </if>
+            <if test="roleId !=null and roleId.length() !=0">
+                #{roleId},
+            </if>
+            <if test="menuId !=null and menuId.length() !=0">
+                #{menuId},
+            </if>
+            <if test="menuState !=null">
+                #{menuState},
+            </if>
+            <if test="menuCreateDate !=null">
+                #{menuCreateDate},
+            </if>
+            <if test="menuUpdataDate !=null">
+                #{menuUpdataDate},
+            </if>
+        </trim>
+
+
+    </insert>
+
+
+</mapper>

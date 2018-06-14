@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hunt.dao.SelectUserRoleMenuMapper">
+    <resultMap id="SystemUserROleMenuMap" type="com.hunt.model.entity.SysUserRoleMenu">
+        <result column="id" property="id"/>
+        <result column="name" property="menuName"/>
+        <result column="is_final" property="isFinal"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="MENU_CODE" property="menuCode" jdbcType="VARCHAR"/>
+    </resultMap>
+      <select id="selectUserRoleMenu" parameterType="long" resultMap="SystemUserROleMenuMap">
+                SELECT
+                   distinct syspg.name,
+                    syspg.id,
+                    syspg.is_final,
+                    syspg.PARENT_ID,
+                    syspg.MENU_CODE
+                FROM
+                    sys_user sur
+                    LEFT JOIN sys_user_role_organization sysuro ON sur.id = sysuro.sys_user_id
+                    LEFT JOIN sys_role_organization sysro ON sysro.id = sysuro.sys_role_organization_id
+                    left join SYS_ROLE_PERMISSION sysrp on sysrp.SYS_ROLE_ID= sysro.SYS_ROLE_ID
+                    LEFT JOIN sys_permission sysp ON sysp.id = sysrp.SYS_PERMISSION_ID
+                    LEFT JOIN sys_permission_group syspg ON syspg.id = sysp.sys_permission_group_id
+                WHERE
+                    sur.id = #{id}
+                    AND sysuro.status = 1
+                    AND syspg.status = 1
+                    AND sysp.status = 1
+      </select>
+
+
+    <resultMap id="SystemUserRole" type="com.hunt.model.entity.SystemUserRole">
+        <result column="name" property="roleName"/>
+        <result column="id" property="roleId"/>
+        <result column="CODE" property="roleCode"/>
+        <result column="SYS_PERMISSION_GROUP_ID" property="sysPermissionGroupId"/>
+        <result column="IS_FINAL" property="isFinal"/>
+    </resultMap>
+    <!--查詢用戶的權限-->
+    <select id="queryUserRoleList" parameterType="long" resultMap="SystemUserRole">
+    SELECT
+       distinct sysp.name,
+        sysp.id,
+        sysp.CODE,
+        sysp.SYS_PERMISSION_GROUP_ID,
+        sysp.IS_FINAL
+    FROM
+        sys_user sur
+        LEFT JOIN sys_user_role_organization sysuro ON sur.id = sysuro.sys_user_id
+        LEFT JOIN sys_role_organization sysro ON sysro.id = sysuro.sys_role_organization_id
+        left join SYS_ROLE_PERMISSION sysrp on sysrp.SYS_ROLE_ID= sysro.SYS_ROLE_ID
+        LEFT JOIN sys_permission sysp ON sysp.id = sysrp.SYS_PERMISSION_ID
+        LEFT JOIN sys_permission_group syspg ON syspg.id = sysp.sys_permission_group_id
+    WHERE
+        sur.id = #{id}
+        AND sysuro.status = 1
+        AND syspg.status = 1
+        AND sysp.status = 1
+    </select>
+
+</mapper>
