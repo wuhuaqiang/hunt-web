@@ -240,7 +240,7 @@ public class UserController extends BaseController {
      */
 
     @ApiOperation(value = "禁用账户", httpMethod = "POST", produces = "application/json", response = Result.class)
-    @RequiresPermissions("user:forbidden")
+   /* @RequiresPermissions("user:forbidden")*/
     @ResponseBody
     @RequestMapping(value = "forbiddenUser", method = RequestMethod.POST)
     public Result forbiddenUser(@RequestBody Map<String, Object> params) {
@@ -262,7 +262,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "启用账户", httpMethod = "POST", produces = "application/json", response = Result.class)
-    @RequiresPermissions("user:enable")
+    /*@RequiresPermissions("user:enable")*/
     @ResponseBody
     @RequestMapping(value = "enableUser", method = RequestMethod.POST)
     public Result enableUser(@RequestBody Map<String, Object> params) {
