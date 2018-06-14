@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/hunt-common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hunt-dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hunt-model" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hunt-parent" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hunt-service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/hunt-web" charset="UTF-8" />
+  </component>
+</project>
