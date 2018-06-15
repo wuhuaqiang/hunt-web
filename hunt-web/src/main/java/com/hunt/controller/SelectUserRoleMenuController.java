@@ -62,6 +62,7 @@ public class SelectUserRoleMenuController extends BaseController {
         }
         return result;
     }
+
     /**
      * 获取用户的权限信息
      *
@@ -82,6 +83,7 @@ public class SelectUserRoleMenuController extends BaseController {
         }
         return result;
     }
+
     /**
      * 获取所以的权限信息
      *
@@ -100,6 +102,7 @@ public class SelectUserRoleMenuController extends BaseController {
         }
         return result;
     }
+
     /**
      * 用户添加
      *
@@ -125,10 +128,11 @@ public class SelectUserRoleMenuController extends BaseController {
         }
         return result;
     }
+
     /**
      * 查询用户列表
      *
-     * @param params   查询参数
+     * @param params 查询参数
      * @return
      */
     @ApiOperation(value = "查询用户列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
@@ -147,6 +151,7 @@ public class SelectUserRoleMenuController extends BaseController {
         PageInfo pageInfo = sysUserService.selectPage(page, rows, StringUtil.camelToUnderline(sort), order, loginName, zhName, email, phone, address);
         return Result.success(pageInfo);
     }
+
     /**
      * 角色列表
      *
@@ -158,9 +163,10 @@ public class SelectUserRoleMenuController extends BaseController {
     @RequestMapping(value = "/listRole", method = RequestMethod.POST)
     public Result listRole(@RequestBody Map<String, Object> params) {
         /*  PageInfo pageInfo = sysRoleService.selectPage(page, rows);*/
-        PageInfo pageInfo = sysRoleService.listRole(Integer.valueOf((String) params.get("page")), Integer.valueOf((String) params.get("rows")));
+        PageInfo pageInfo = sysRoleService.listRole(Integer.valueOf((String) params.get("page")), Integer.valueOf((String) params.get("rows")), (String) params.get("roleName"));
         return Result.success(pageInfo);
     }
+
     /**
      * 查询权限列表
      *
@@ -177,18 +183,19 @@ public class SelectUserRoleMenuController extends BaseController {
 
     /**
      * 根据用户id进行修改信息
+     *
      * @return
      */
     @ResponseBody
     @ApiOperation(value = "根据用户id进行修改信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @RequestMapping(value = "updataUserId", method = RequestMethod.POST)
-    public Result updataUserId(@RequestBody SysUser sysUser){
-         if(sysUser!=null) {
-             sysUserService.updateUser(sysUser);
-             return Result.success();
-         }else {
-             return Result.error("用户修改失败");
-         }
+    public Result updataUserId(@RequestBody SysUser sysUser) {
+        if (sysUser != null) {
+            sysUserService.updateUser(sysUser);
+            return Result.success();
+        } else {
+            return Result.error("用户修改失败");
+        }
     }
 
 }

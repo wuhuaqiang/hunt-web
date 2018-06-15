@@ -17,7 +17,7 @@
             </collection>
         </collection>
     </resultMap>
-    <select id="listRole" resultMap="roleMap">
+    <select id="listRole" resultMap="roleMap" parameterType="string">
         SELECT
             r.id roleId,
             r.name roleName,
@@ -37,6 +37,9 @@
             LEFT JOIN sys_permission p ON rp.sys_permission_id = p.id
             LEFT JOIN sys_permission_group pg ON p.sys_permission_group_id = pg.id
         WHERE  r.status = '1'
+        <if test="roleName !=null and roleName.length() != 0">
+            AND r.name like concat(concat('%',#{roleName}),'%')
+        </if>
     </select>
     <resultMap id="baseResultMap" type="com.hunt.model.entity.SysRole">
         <result column="id" property="id" jdbcType="BIGINT"/>
@@ -225,10 +228,13 @@
         WHERE status = 1
     </select>
 
-    <select id="selectCounts" resultType="integer">
+    <select id="selectCounts" resultType="integer" parameterType="string">
         SELECT count(*)
         FROM sys_role
         WHERE status = 1
+        <if test="roleName !=null and roleName.length() != 0">
+            AND name like concat(concat('%',#{roleName}),'%')
+        </if>
     </select>
     <select id="selectMaxId" resultType="integer">
         SELECT MAX(ID) FROM SYS_ROLE

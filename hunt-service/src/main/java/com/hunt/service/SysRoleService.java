@@ -17,7 +17,7 @@ public interface SysRoleService {
 
     PageInfo selectPage(int page, int row);
 
-    PageInfo listRole(int page, int row);
+    PageInfo listRole(int page, int row, String roleName);
 
     void deleteRole(SysRole sysRole);
 }

@@ -26,13 +26,13 @@ public interface SysRoleMapper {
     public List<SysRole> selectByUserId(@Param("userId") Integer userId);
 
     //查询角色相关信息列表
-    public List<JSONObject> listRole();
+    public List<JSONObject> listRole(@Param("roleName") String roleName);
 
     //查询全部
     public List<SysRole> selectAll();
 
     //查询数量
-    public int selectCounts();
+    public int selectCounts(@Param("roleName") String roleName);
 
     boolean isExsitName(@Param("name") String name);
 

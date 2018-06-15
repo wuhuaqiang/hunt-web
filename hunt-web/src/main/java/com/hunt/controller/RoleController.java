@@ -43,11 +43,11 @@ public class RoleController extends BaseController {
     /**
      * 新增角色
      *
-     * @param params   参数
+     * @param params 参数
      * @return
      */
     @ApiOperation(value = "新增角色", httpMethod = "POST", produces = "application/json", response = Result.class)
-  /*  @RequiresPermissions("role:insert")*/
+    /*  @RequiresPermissions("role:insert")*/
     @ResponseBody
     @RequestMapping(value = "insert", method = RequestMethod.POST)
     public Result insert(@RequestBody Map<String, Object> params) {
@@ -74,7 +74,7 @@ public class RoleController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新角色", httpMethod = "POST", produces = "application/json", response = Result.class)
-   /* @RequiresPermissions("role:update")*/
+    /* @RequiresPermissions("role:update")*/
     @ResponseBody
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Result update(@RequestBody Map<String, Object> params) {
@@ -101,6 +101,7 @@ public class RoleController extends BaseController {
         systemService.clearAuthorizationInfoByRoleId(id);
         return Result.success();
     }
+
     /**
      * 删除角色
      *
@@ -108,7 +109,7 @@ public class RoleController extends BaseController {
      * @return
      */
     @ApiOperation(value = "删除角色", httpMethod = "POST", produces = "application/json", response = Result.class)
-   /* @RequiresPermissions("role:delete")*/
+    /* @RequiresPermissions("role:delete")*/
     @ResponseBody
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Result delete(@RequestBody Map<String, Object> params) {
@@ -135,9 +136,9 @@ public class RoleController extends BaseController {
     @ApiOperation(value = "角色列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
     @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Result list(@RequestBody Map<String,Object> params) {
-      /*  PageInfo pageInfo = sysRoleService.selectPage(page, rows);*/
-          PageInfo pageInfo = sysRoleService.listRole(Integer.valueOf((String)params.get("page")), Integer.valueOf((String)params.get("rows")));
+    public Result list(@RequestBody Map<String, Object> params) {
+        /*  PageInfo pageInfo = sysRoleService.selectPage(page, rows);*/
+        PageInfo pageInfo = sysRoleService.listRole(Integer.valueOf((String) params.get("page")), Integer.valueOf((String) params.get("rows")), (String) params.get("roleName"));
         return Result.success(pageInfo);
     }
 }

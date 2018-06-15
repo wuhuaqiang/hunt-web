@@ -68,7 +68,7 @@ public class SysRoleServiceImpl implements SysRoleService {
 
     @Override
     public PageInfo selectPage(int page, int row) {
-        int counts = sysRoleMapper.selectCounts();
+        int counts = sysRoleMapper.selectCounts(null);
         List<SysRole> sysRoles = sysRoleMapper.selectAll();
 
         List<SysRoleDto> sysRoleDtoList = new ArrayList<>();
@@ -90,13 +90,13 @@ public class SysRoleServiceImpl implements SysRoleService {
     }
 
     @Override
-    public PageInfo listRole(int page, int row) {
-        int counts = sysRoleMapper.selectCounts();
+    public PageInfo listRole(int page, int row ,String roleName) {
+        int counts = sysRoleMapper.selectCounts(roleName);
        /* PageHelper.startPage(page, row);*/
         if((page-1)*row+1>counts){
             return null;
         }
-        List<JSONObject> jsonObjects = sysRoleMapper.listRole();
+        List<JSONObject> jsonObjects = sysRoleMapper.listRole(roleName);
         List<JSONObject> result =new  ArrayList<JSONObject>();
         if((page*row)>counts){
             for ( int i= (page-1)*row;i<counts;i++){
