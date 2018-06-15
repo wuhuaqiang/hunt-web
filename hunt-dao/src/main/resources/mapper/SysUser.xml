@@ -320,10 +320,13 @@
         </if>
     </select>
 
-    <select id="selectCounts" resultType="integer">
+    <select id="selectCounts" resultType="integer" parameterType="string">
         SELECT count(*)
         FROM sys_user
         WHERE status != 2
+        <if test="zhName != null and zhName.length() != 0">
+            AND zh_name LIKE concat(concat('%', #{zhName}),'%')
+        </if>
     </select>
     <select id="selectByLoginName"  parameterType="java.lang.String" resultType="boolean">
         <![CDATA[SELECT count(*)

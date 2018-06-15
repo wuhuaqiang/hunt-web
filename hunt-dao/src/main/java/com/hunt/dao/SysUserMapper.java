@@ -22,7 +22,7 @@ public interface SysUserMapper {
     public List<SysUser> selectAll(@Param("sort") String sort, @Param("order") String order, @Param("loginName") String loginName, @Param("zhName") String zhName, @Param("email") String email, @Param("phone") String phone, @Param("address") String address);
 
     //查询数量
-    public int selectCounts();
+    public int selectCounts( @Param("zhName") String zhName);
 
     boolean selectByLoginName(@Param("loginName") String loginName);
 

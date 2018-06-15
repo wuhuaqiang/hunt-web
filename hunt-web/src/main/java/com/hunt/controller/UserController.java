@@ -203,18 +203,17 @@ public class UserController extends BaseController {
     /**
      * 更新密码
      *
-     * @param id                id
-     * @param repeatNewPassword
-     * @param newPassword       新密码
+     * @param params 参数
      * @return
      */
     @ApiOperation(value = "更新密码", httpMethod = "POST", produces = "application/json", response = Result.class)
-    @RequiresPermissions("user:updatePassword")
+    /*@RequiresPermissions("user:updatePassword")*/
     @ResponseBody
     @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
-    public Result updatePassword(@RequestParam Integer id,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String repeatNewPassword) {
+    public Result updatePassword(@RequestBody Map<String, Object> params) {
+        Integer id = Integer.valueOf(params.get("id").toString());
+        String newPassword = params.get("newPassword").toString();
+        String repeatNewPassword = params.get("repeatNewPassword").toString();
         if ((!StringUtils.hasText(newPassword)) && newPassword.length() < 6) {
             return Result.error("请设置密码长度大于等于6");
         }
@@ -240,7 +239,7 @@ public class UserController extends BaseController {
      */
 
     @ApiOperation(value = "禁用账户", httpMethod = "POST", produces = "application/json", response = Result.class)
-   /* @RequiresPermissions("user:forbidden")*/
+    /* @RequiresPermissions("user:forbidden")*/
     @ResponseBody
     @RequestMapping(value = "forbiddenUser", method = RequestMethod.POST)
     public Result forbiddenUser(@RequestBody Map<String, Object> params) {
