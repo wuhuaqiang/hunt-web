@@ -17,9 +17,8 @@
                     syspg.MENU_CODE
                 FROM
                     sys_user sur
-                    LEFT JOIN sys_user_role_organization sysuro ON sur.id = sysuro.sys_user_id
-                    LEFT JOIN sys_role_organization sysro ON sysro.id = sysuro.sys_role_organization_id
-                    left join SYS_ROLE_PERMISSION sysrp on sysrp.SYS_ROLE_ID= sysro.SYS_ROLE_ID
+                    LEFT JOIN sys_user_role sysuro ON sur.id = sysuro.sys_user_id
+                    LEFT JOIN SYS_ROLE_PERMISSION sysrp on sysrp.SYS_ROLE_ID= sysuro.SYS_ROLE_ID
                     LEFT JOIN sys_permission sysp ON sysp.id = sysrp.SYS_PERMISSION_ID
                     LEFT JOIN sys_permission_group syspg ON syspg.id = sysp.sys_permission_group_id
                 WHERE

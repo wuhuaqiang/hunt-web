@@ -33,6 +33,8 @@ public class SystemServiceImpl implements SystemService {
     @Autowired
     private SysUserRoleOrganizationMapper sysUserRoleOrganizationMapper;
     @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
     private SysLoginStatusMapper sysLoginStatusMapper;
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
@@ -82,7 +84,7 @@ public class SystemServiceImpl implements SystemService {
 
     @Override
     public void clearAuthorizationInfoByRoleId(Integer roleId) {
-        log.debug("clear authorization info cache by roleId: {}", roleId);
+    /*    log.debug("clear authorization info cache by roleId: {}", roleId);
         List<Integer> list = sysRoleOrganizationMapper.selectByRoleId(roleId);
         if (list.size() > 0) {
             for (Integer id : list) {
@@ -94,6 +96,16 @@ public class SystemServiceImpl implements SystemService {
                             redisTemplate.opsForValue().getOperations().delete(SystemConstant.shiro_cache_prefix + sysUser.getLoginName());
                         }
                     }
+                }
+            }
+        }*/
+        log.debug("clear authorization info cache by roleId: {}", roleId);
+        List<Integer> userIds = sysUserRoleMapper.selectByRoleId(roleId);
+        if (userIds.size() > 0) {
+            for (Integer userId : userIds) {
+                SysUser sysUser = sysUserMapper.selectById(userId);
+                if (sysUser != null) {
+                    redisTemplate.opsForValue().getOperations().delete(SystemConstant.shiro_cache_prefix + sysUser.getLoginName());
                 }
             }
         }
