@@ -91,9 +91,9 @@ public class BaseController {
                 //其他错误
             }
             //调试时输出异常日志
-            if (systemService.selectDataItemByKey("error_detail", 2).equals("true")) {
+      /*      if (systemService.selectDataItemByKey("error_detail", 2).equals("true")) {
                 result.setData(StringUtil.exceptionDetail(exception));
-            }
+            }*/
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().append(new Gson().toJson(result));

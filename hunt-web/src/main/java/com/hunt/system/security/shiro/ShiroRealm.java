@@ -37,6 +37,8 @@ public class ShiroRealm extends AuthorizingRealm {
     @Autowired
     private SysUserRoleOrganizationMapper sysUserRoleOrganizationMapper;
     @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
     private SysRoleMapper sysRoleMapper;
     @Autowired
     private SysRoleOrganizationMapper sysRoleOrganizationMapper;
@@ -44,6 +46,7 @@ public class ShiroRealm extends AuthorizingRealm {
     private SysRolePermissionMapper sysRolePermissionMapper;
     @Autowired
     private RedisTemplate<Object, Object> redisTemplate;
+
     /**
      * 鉴权信息
      *
@@ -56,17 +59,27 @@ public class ShiroRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         String loginStr = (String) principalCollection.getPrimaryPrincipal();
         SysUser user = sysUserMapper.selectUserByLoginName(loginStr);
-        List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());
+        /* List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());*/
         Set<String> permissions = new HashSet<>();
         Set<String> roles = new HashSet<>();
-        for (SysUserPermission userPermission : userPermissions) {
+       /* for (SysUserPermission userPermission : userPermissions) {
             SysPermission sysPermission = sysPermissionMapper.selectById(userPermission.getSysPermissionId());
             permissions.add(sysPermission.getCode());
-        }
-        List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
+        }*/
+/*        List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
         for (SysUserRoleOrganization sysUserRoleOrganization : userRoleOrganizations) {
             SysRoleOrganization sysRoleOrganization = sysRoleOrganizationMapper.selectById(sysUserRoleOrganization.getSysRoleOrganizationId());
             SysRole sysRole = sysRoleMapper.selectById(sysRoleOrganization.getSysRoleId());
+            roles.add(sysRole.getName());
+            List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
+            for (SysRolePermission sysRolePermission : sysRolePermissions) {
+                SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
+                permissions.add(sysPermission.getCode());
+            }
+        }  */
+        List<SysUserRole> userRoles = sysUserRoleMapper.selectByUserId(user.getId());
+        for (SysUserRole userRole : userRoles) {
+            SysRole sysRole = sysRoleMapper.selectById(userRole.getSysRoleId());
             roles.add(sysRole.getName());
             List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
             for (SysRolePermission sysRolePermission : sysRolePermissions) {

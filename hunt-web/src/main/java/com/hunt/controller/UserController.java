@@ -207,7 +207,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新密码", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /*@RequiresPermissions("user:updatePassword")*/
+    @RequiresPermissions("user:updatePassword")
     @ResponseBody
     @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
     public Result updatePassword(@RequestBody Map<String, Object> params) {

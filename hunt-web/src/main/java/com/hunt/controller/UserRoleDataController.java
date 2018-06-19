@@ -20,158 +20,174 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/userRoleData")
-public class UserRoleDataController extends BaseController  {
+public class UserRoleDataController extends BaseController {
     /**
-     *对用户的角色进行操作
+     * 对用户的角色进行操作
      */
-     @Resource
+    @Resource
     private UserRoleDataService userRoleDataService;
+
     /**
      * 设置用户角色
+     *
      * @param
      * @return
      */
     @ApiOperation(value = "设置用户角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "/setUserRole", method = RequestMethod.POST)
-     public Result setUserRole(@RequestBody Map<String,Object>map){
-         Result result =null;
-         try {
-             SysUserRole sysUserRole = new  SysUserRole();
-             sysUserRole.setSysUserId( Integer.valueOf(map.get("uId").toString()));
-             sysUserRole.setSysRoleId( Integer.valueOf(map.get("roleId").toString()));
-             Integer i= userRoleDataService.insertUserRoleOrganization(sysUserRole);
-             result=Result.success();
-         }catch (Exception e){
-             e.printStackTrace();
-             result=Result.error();
-         }
-         return  result;
-     }
+    public Result setUserRole(@RequestBody Map<String, Object> map) {
+        Result result = null;
+        try {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setSysUserId(Integer.valueOf(map.get("uId").toString()));
+            sysUserRole.setSysRoleId(Integer.valueOf(map.get("roleId").toString()));
+            Integer i = userRoleDataService.insertUserRoleOrganization(sysUserRole);
+            result = Result.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = Result.error();
+        }
+        return result;
+    }
+
     /**
      * 添加角色信息
+     *
      * @param
      * @return
      */
     @ApiOperation(value = "添加角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "/addSysPermissionGroup", method = RequestMethod.POST)
-     public  Result addSysPermissionGroup(@RequestBody Map<String,Object> map){
-        Result result =null;
+    public Result addSysPermissionGroup(@RequestBody Map<String, Object> map) {
+        Result result = null;
         try {
-            String  menuCode=map.get("menuCode").toString();
-            String permissionGroupName= map.get("permissionGroupName").toString();
-            String description =map.get("description").toString();
-            String parentId= map.get("parentId").toString();
-            String status= map.get("status").toString();
-            boolean faleg= userRoleDataService.booleanMeanCode(menuCode);
-          boolean f=  userRoleDataService.isExistGroupName(permissionGroupName);
-          if(f){
-              result=Result.error("角色名字重复");
-              return  result;
+            String menuCode = (String) map.get("menuCode");
+            String permissionGroupName = (String) map.get("permissionGroupName");
+            String description = (String) map.get("description");
+            String parentId = (String) map.get("parentId");
+            String status = map.get("status").toString();
+            boolean faleg = userRoleDataService.booleanMeanCode(menuCode);
+            boolean f = userRoleDataService.isExistGroupName(permissionGroupName);
+            if (f) {
+                result = Result.error("角色名字重复");
+                return result;
 
-             }
-            if(!faleg){
-                SysPermissionGroup sysPermissionGroup= new SysPermissionGroup();
+            }
+            if (!faleg) {
+                SysPermissionGroup sysPermissionGroup = new SysPermissionGroup();
                 sysPermissionGroup.setMenuCode(menuCode);
                 sysPermissionGroup.setName(permissionGroupName);
                 sysPermissionGroup.setDescription(description);
-                sysPermissionGroup.setParentId(Integer.valueOf(parentId));
+                if(parentId==null){
+                    sysPermissionGroup.setParentId(null);
+                }else {
+                    sysPermissionGroup.setParentId(Integer.valueOf(parentId));
+                }
                 sysPermissionGroup.setStatus(Integer.parseInt(status));
                 userRoleDataService.insert(sysPermissionGroup);
-                result=Result.success();
-                return  result;
+                result = Result.success();
+                return result;
             }
-            result=Result.error("权限code已存在");
-        }catch (Exception e){
+            result = Result.error("权限code已存在");
+        } catch (Exception e) {
             e.printStackTrace();
-            result=Result.error();
+            result = Result.error();
         }
-        return  result;
+        return result;
     }
+
     /**
      * 查询角色信息
+     *
      * @param
      * @return
      */
     @ApiOperation(value = "查询角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "/selectAll", method = RequestMethod.POST)
-    public  Result selectAll(){
-        Result result =null;
+    public Result selectAll() {
+        Result result = null;
         try {
-            result= Result.success(userRoleDataService.selectAll(null));
+            result = Result.success(userRoleDataService.selectAll(null));
             return result;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            result=Result.error();
+            result = Result.error();
         }
         return result;
     }
+
     /**
      * 查询角色分页信息
+     *
      * @param
      * @return
      */
     @ApiOperation(value = "查询角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "/selectPage", method = RequestMethod.POST)
-    public  Result selectPage(@RequestBody Map<String ,Object>map){
-        Result result =null;
+    public Result selectPage(@RequestBody Map<String, Object> map) {
+        Result result = null;
         try {
-            int  page=  Integer.valueOf( map.get("page").toString()) ;
-            int  rows=  Integer.valueOf( map.get("rows").toString()) ;
-            String  name=  (String)map.get("name");
-            result= Result.success(userRoleDataService.selectAll(page,rows,name));
+            int page = Integer.valueOf(map.get("page").toString());
+            int rows = Integer.valueOf(map.get("rows").toString());
+            String name = (String) map.get("name");
+            result = Result.success(userRoleDataService.selectAll(page, rows, name));
             return result;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            result=Result.error();
+            result = Result.error();
         }
         return result;
     }
+
     /**
      * 更新角色信息
+     *
      * @param
      * @return
      */
     @ApiOperation(value = "更新角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "/updateSysPermissionGroup", method = RequestMethod.POST)
-    public Result updateSysPermissionGroup(@RequestBody SysPermissionGroup sysPermissionGroup){
-        Result result =null;
+    public Result updateSysPermissionGroup(@RequestBody SysPermissionGroup sysPermissionGroup) {
+        Result result = null;
         try {
             userRoleDataService.update(sysPermissionGroup);
-            result= Result.success();
-            return  result;
-        }catch (Exception e){
+            result = Result.success();
+            return result;
+        } catch (Exception e) {
             e.printStackTrace();
-            result =Result.error();
+            result = Result.error();
         }
-           return result;
+        return result;
     }
+
     /**
      * 删除角色信息
+     *
      * @param
      * @return
      */
     @ApiOperation(value = "删除角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "/deleteSysPermissionGroup", method = RequestMethod.POST)
-     public  Result deleteSysPermissionGroup(@RequestBody Map<String,Object>map){
-         Result result =null;
-         try {
-          Integer id=   Integer.valueOf(map.get("id").toString());
-             SysPermissionGroup  sysPermissionGroup=    userRoleDataService.selectById(id);
-             sysPermissionGroup.setStatus(2);
-             userRoleDataService.update(sysPermissionGroup);
-             result=Result.success();
-             return  result;
-         }catch (Exception e){
-             e.printStackTrace();
-              result=Result.error();
-         }
-         return  result;
-     }
+    public Result deleteSysPermissionGroup(@RequestBody Map<String, Object> map) {
+        Result result = null;
+        try {
+            Integer id = Integer.valueOf(map.get("id").toString());
+            SysPermissionGroup sysPermissionGroup = userRoleDataService.selectById(id);
+            sysPermissionGroup.setStatus(2);
+            userRoleDataService.update(sysPermissionGroup);
+            result = Result.success();
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = Result.error();
+        }
+        return result;
+    }
 
 }

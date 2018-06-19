@@ -225,7 +225,7 @@
         </where>
     </select>
 
-    <select id="selectById" parameterType="long" resultType="SysRoleOrganization">
+    <select id="selectById" parameterType="integer" resultType="SysRoleOrganization">
         SELECT *
         FROM sys_role_organization
         WHERE id = #{id} AND status = 1
