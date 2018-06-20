@@ -17,6 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.hunt.service.SystemService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * @Author: ouyangan
@@ -72,6 +73,7 @@ public class LogAOP {
         log.setIp(request.getRemoteAddr());
         log.setUrl(request.getRequestURL().toString());
         log.setUserAgent(request.getHeader("user-agent"));
+        log.setCreateTime(new Date());
         systemService.insertSysControllerLog(log);
 
         logger.info("request contentType:{}", request.getHeader("Accept"));

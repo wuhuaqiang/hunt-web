@@ -60,25 +60,26 @@ public class SystemController extends BaseController {
 
     /**
      * 登录
-     *loginName 登录名
+     * loginName 登录名
      * password  密码
      * platforms 终端类型
+     *
      * @return
      */
     @ApiOperation(value = "登录", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
-    @RequestMapping(value = "login", method = RequestMethod.POST,produces = "application/json")
-    public Result login(@RequestBody  Map<String,Object> params,
+    @RequestMapping(value = "login", method = RequestMethod.POST, produces = "application/json")
+    public Result login(@RequestBody Map<String, Object> params,
                         HttpServletRequest request) throws Exception {
        /* //极限验证二次服务验证
         if (!verifyCaptcha(request)) {
             return Result.instance(ResponseCode.verify_captcha_error.getCode(), ResponseCode.verify_captcha_error.getMsg());
         }*/
-       String loginName= MD5Utils.md5LoginName((String)params.get("loginName"));
-       String password = (String)params.get("password");
-       String platforms=(String)params.get("platforms");
+        String loginName = MD5Utils.md5LoginName((String) params.get("loginName"));
+        String password = (String) params.get("password");
+        String platforms = (String) params.get("platforms");
         SysUser user = sysUserService.selectByLoginName(loginName);
-        Integer platform= Integer.parseInt(platforms);
+        Integer platform = Integer.parseInt(platforms);
         if (user == null) {
             return Result.instance(ResponseCode.unknown_account.getCode(), ResponseCode.unknown_account.getMsg());
         }
@@ -89,8 +90,8 @@ public class SystemController extends BaseController {
         subject.login(new UsernamePasswordToken(loginName, password));
         LoginInfo loginInfo = sysUserService.login(user, subject.getSession().getId(), platform);
         subject.getSession().setAttribute("loginInfo", loginInfo);
-       String session= subject.getSession().getId().toString();
-         System.out.print("00000----==="+session.toString());
+        String session = subject.getSession().getId().toString();
+        System.out.print("00000----===" + session.toString());
         log.debug("登录成功");
         return Result.success(loginInfo);
     }
@@ -187,30 +188,30 @@ public class SystemController extends BaseController {
     /**
      * 查询日志列表
      *
-     * @param page   起始页码
-     * @param rows   分页大小
-     * @param sort   排序字段
-     * @param order  排序规则
-     * @param method 请求执行方法
-     * @param url    请求url
-     * @param param  请求参数
-     * @param result 请求响应内容
+     * @param params 起始页码
      * @return
      */
-    @ApiOperation(value = "查询日志列表", httpMethod = "GET", produces = "application/json", response = PageInfo.class)
-    @RequiresPermissions("log:list")
+    @ApiOperation(value = "查询日志列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
+    /*  @RequiresPermissions("log:list")*/
     @ResponseBody
-    @RequestMapping(value = "log/list", method = RequestMethod.GET)
-    public PageInfo logList(@RequestParam(defaultValue = "1") int page,
-                            @RequestParam(defaultValue = "30") int rows,
-                            @RequestParam(defaultValue = "id") String sort,
-                            @RequestParam(defaultValue = "desc") String order,
-                            @RequestParam(defaultValue = "", required = false) String method,
-                            @RequestParam(defaultValue = "", required = false) String url,
-                            @RequestParam(defaultValue = "", required = false) String param,
-                            @RequestParam(defaultValue = "", required = false) String result) {
-        PageInfo pageInfo = systemService.selectLog(page, rows, StringUtil.camelToUnderline(sort), order, method, url, param, result);
-        return pageInfo;
+    @RequestMapping(value = "log/list", method = RequestMethod.POST)
+    public Result logList(@RequestBody Map<String, Object> params) {
+        Result results = null;
+        try {
+            Integer page = Integer.valueOf((String) params.get("page"));
+            Integer rows = Integer.valueOf((String) params.get("rows"));
+            String method = (String) params.get("method");
+            String url = (String) params.get("url");
+            String param = (String) params.get("param");
+            String result = (String) params.get("result");
+            String sort = "id";
+            String order = "desc";
+            results = Result.success(systemService.selectLog(page, rows, StringUtil.camelToUnderline(sort), order, method, url, param, result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            results = Result.error();
+        }
+        return results;
     }
 
     /**

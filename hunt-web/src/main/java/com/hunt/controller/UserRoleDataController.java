@@ -83,7 +83,7 @@ public class UserRoleDataController extends BaseController {
                 if (parentId == null) {
                     sysPermissionGroup.setParentId(null);
                 } else {
-                    sysPermissionGroup.setParentId(Integer.valueOf((String) parentId));
+                    sysPermissionGroup.setParentId((Integer) parentId);
                 }
                 sysPermissionGroup.setStatus(Integer.parseInt(status));
                 userRoleDataService.insert(sysPermissionGroup);
