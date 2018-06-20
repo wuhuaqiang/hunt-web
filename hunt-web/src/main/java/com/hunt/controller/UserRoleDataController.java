@@ -66,7 +66,7 @@ public class UserRoleDataController extends BaseController {
             String menuCode = (String) map.get("menuCode");
             String permissionGroupName = (String) map.get("permissionGroupName");
             String description = (String) map.get("description");
-            String parentId = (String) map.get("parentId");
+            Object parentId = map.get("parentId");
             String status = map.get("status").toString();
             boolean faleg = userRoleDataService.booleanMeanCode(menuCode);
             boolean f = userRoleDataService.isExistGroupName(permissionGroupName);
@@ -80,10 +80,10 @@ public class UserRoleDataController extends BaseController {
                 sysPermissionGroup.setMenuCode(menuCode);
                 sysPermissionGroup.setName(permissionGroupName);
                 sysPermissionGroup.setDescription(description);
-                if(parentId==null){
+                if (parentId == null) {
                     sysPermissionGroup.setParentId(null);
-                }else {
-                    sysPermissionGroup.setParentId(Integer.valueOf(parentId));
+                } else {
+                    sysPermissionGroup.setParentId(Integer.valueOf((String) parentId));
                 }
                 sysPermissionGroup.setStatus(Integer.parseInt(status));
                 userRoleDataService.insert(sysPermissionGroup);
