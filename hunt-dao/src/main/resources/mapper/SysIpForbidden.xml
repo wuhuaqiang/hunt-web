@@ -206,18 +206,14 @@
         WHERE status = 1
     </select>
     <select id="isExistIp" resultType="java.lang.Boolean">
-        SELECT exists(
-                SELECT *
-                FROM sys_ip_forbidden
-                WHERE status = 1 AND ip = #{ip}
-        )
+        SELECT count(*)
+        FROM sys_ip_forbidden
+        WHERE status = 1 AND ip = #{ip}
     </select>
     <select id="isExistIpExcludeId" resultType="java.lang.Boolean">
-        SELECT exists(
-                SELECT *
-                FROM sys_ip_forbidden
-                WHERE status = 1 AND ip = #{ip} AND id != #{id}
-        )
+        SELECT count(*)
+        FROM sys_ip_forbidden
+        WHERE status = 1 AND ip = #{ip} AND id != #{id}
     </select>
 
 </mapper>

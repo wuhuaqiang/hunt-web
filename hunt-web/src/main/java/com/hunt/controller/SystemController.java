@@ -390,18 +390,17 @@ public class SystemController extends BaseController {
     /**
      * 插入ip
      *
-     * @param ip          ip地址
-     * @param expireTime  过期时间
-     * @param description 说明
+     * @param params,//参数
      * @return
      */
     @ApiOperation(value = "插入ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-    @RequiresPermissions("ip:insert")
+  /*  @RequiresPermissions("ip:insert")*/
     @ResponseBody
     @RequestMapping(value = "ip/insert", method = RequestMethod.POST)
-    public Result ipInsert(@RequestParam String ip,
-                           @RequestParam String expireTime,
-                           @RequestParam String description) throws ParseException {
+    public Result ipInsert(@RequestBody Map<String, Object> params) throws ParseException {
+        String ip = (String) params.get("ip");
+        String expireTime = (String) params.get("expireTime");
+        String description = (String) params.get("description");
         boolean isExistIp = systemService.isExistIp(ip);
         if (isExistIp) {
             return Result.error(ResponseCode.name_already_exist.getMsg());
@@ -417,14 +416,15 @@ public class SystemController extends BaseController {
     /**
      * 删除ip
      *
-     * @param id
+     * @param params
      * @return
      */
-    @ApiOperation(value = "删除ip", httpMethod = "GET", produces = "application/json", response = Result.class)
-    @RequiresPermissions("ip:delete")
+    @ApiOperation(value = "删除ip", httpMethod = "POST", produces = "application/json", response = Result.class)
+    /*@RequiresPermissions("ip:delete")*/
     @ResponseBody
-    @RequestMapping(value = "ip/delete", method = RequestMethod.GET)
-    public Result ipDelete(@RequestParam Integer id) {
+    @RequestMapping(value = "ip/delete", method = RequestMethod.POST)
+    public Result ipDelete(@RequestBody Map<String, Object> params) {
+        Integer id = (Integer) params.get("id");
         systemService.deleteIp(id);
         return Result.success();
     }
@@ -432,20 +432,18 @@ public class SystemController extends BaseController {
     /**
      * 更新ip
      *
-     * @param id,         id,
-     * @param ip          ip地址
-     * @param expireTime  过期时间
-     * @param description 说明
+     * @param params,//参数
      * @return
      */
     @ApiOperation(value = "更新ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-    @RequiresPermissions("ip:update")
+   /* @RequiresPermissions("ip:update")*/
     @ResponseBody
     @RequestMapping(value = "ip/update", method = RequestMethod.POST)
-    public Result ipUpdate(@RequestParam Integer id,
-                           @RequestParam String ip,
-                           @RequestParam String expireTime,
-                           @RequestParam String description) throws ParseException {
+    public Result ipUpdate(@RequestBody Map<String, Object> params) throws ParseException {
+        Integer id = (Integer) params.get("id");
+        String ip = (String) params.get("ip");
+        String expireTime = (String) params.get("expireTime");
+        String description = (String) params.get("description");
         boolean isExistIpExcludeId = systemService.isExistIpExcludeId(ip, id);
         if (isExistIpExcludeId) {
             return Result.error(ResponseCode.name_already_exist.getMsg());
@@ -462,24 +460,30 @@ public class SystemController extends BaseController {
     /**
      * 查询ip列表
      *
-     * @param page
-     * @param rows
+     * @param params 分页参数
      * @return
      */
-    @ApiOperation(value = "查询ip列表", httpMethod = "GET", produces = "application/json", response = PageInfo.class)
-    @RequiresPermissions("ip:list")
+    @ApiOperation(value = "查询ip列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
+    /* @RequiresPermissions("ip:list")*/
     @ResponseBody
-    @RequestMapping(value = "ip/list", method = RequestMethod.GET)
-    public PageInfo ipSelect(@RequestParam(defaultValue = "1") int page,
-                             @RequestParam(defaultValue = "30") int rows) {
-        PageInfo pageInfo = systemService.selectIp(page, rows);
-        return pageInfo;
+    @RequestMapping(value = "ip/list", method = RequestMethod.POST)
+    public Result ipSelect(@RequestBody Map<String, Object> params) {
+        Result result = null;
+        try {
+            int page = (Integer) params.get("page");
+            int rows = (Integer) params.get("rows");
+            result = Result.success(systemService.selectIp(page, rows));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("服务器错误！");
+        }
+        return result;
     }
 
-    @ApiOperation(value = "ip拦截开关", httpMethod = "GET", produces = "application/json", response = Result.class)
+    @ApiOperation(value = "ip拦截开关", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
-    @RequestMapping(value = "ip/intercept", method = RequestMethod.GET)
-    public Result intercept(@RequestParam boolean open) {
+    @RequestMapping(value = "ip/intercept", method = RequestMethod.POST)
+    public Result intercept(@RequestBody boolean open) {
         //启用
         if (open == true) {
             systemService.openIpIntercept();
@@ -491,7 +495,7 @@ public class SystemController extends BaseController {
         return Result.success();
     }
 
-    @ApiOperation(value = "ip拦截开关状态", httpMethod = "GET", produces = "application/json", response = Result.class)
+    @ApiOperation(value = "ip拦截开关状态", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "ip/intercept/status")
     public Result interceptStatus() {
