@@ -202,7 +202,7 @@
         </where>
     </select>
 
-    <select id="selectById" parameterType="long" resultType="SysDataItem">
+    <select id="selectById" parameterType="integer" resultType="SysDataItem">
         SELECT *
         FROM sys_data_item
         WHERE id = #{id} AND status = 1

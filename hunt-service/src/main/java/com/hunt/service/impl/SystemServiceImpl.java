@@ -285,7 +285,7 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public boolean selectIPForbiddenStatus() {
         SysDataItem sysDataItem = sysDataItemMapper.selectById(4);
-        if (sysDataItem.getKeyValue().equals("true")) {
+        if (sysDataItem != null && sysDataItem.getKeyValue().equals("true")) {
             return true;
         }
         return false;

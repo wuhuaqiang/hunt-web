@@ -394,7 +394,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "插入ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-  /*  @RequiresPermissions("ip:insert")*/
+    /*  @RequiresPermissions("ip:insert")*/
     @ResponseBody
     @RequestMapping(value = "ip/insert", method = RequestMethod.POST)
     public Result ipInsert(@RequestBody Map<String, Object> params) throws ParseException {
@@ -436,7 +436,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-   /* @RequiresPermissions("ip:update")*/
+    /* @RequiresPermissions("ip:update")*/
     @ResponseBody
     @RequestMapping(value = "ip/update", method = RequestMethod.POST)
     public Result ipUpdate(@RequestBody Map<String, Object> params) throws ParseException {
@@ -483,7 +483,8 @@ public class SystemController extends BaseController {
     @ApiOperation(value = "ip拦截开关", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "ip/intercept", method = RequestMethod.POST)
-    public Result intercept(@RequestBody boolean open) {
+    public Result intercept(@RequestBody Map<String, Object> params) {
+        boolean open = (boolean) params.get("open");
         //启用
         if (open == true) {
             systemService.openIpIntercept();
