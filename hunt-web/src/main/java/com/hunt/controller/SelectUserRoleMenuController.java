@@ -14,6 +14,7 @@ import com.hunt.util.Result;
 import com.hunt.util.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -110,6 +111,7 @@ public class SelectUserRoleMenuController extends BaseController {
      * @return
      */
     @ResponseBody
+    @RequiresPermissions("userMsg:Add")
     @RequestMapping(value = "/userInsert", method = RequestMethod.POST, produces = "application/json")
     public Result userInsert(@RequestBody SysUser sysUser) {
         Result result = null;
@@ -188,6 +190,7 @@ public class SelectUserRoleMenuController extends BaseController {
      */
     @ResponseBody
     @ApiOperation(value = "根据用户id进行修改信息", httpMethod = "POST", produces = "application/json", response = Result.class)
+    @RequiresPermissions("userMsg:Edit")
     @RequestMapping(value = "updataUserId", method = RequestMethod.POST)
     public Result updataUserId(@RequestBody SysUser sysUser) {
         if (sysUser != null) {

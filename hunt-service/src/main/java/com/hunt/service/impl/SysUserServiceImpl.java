@@ -19,7 +19,9 @@ import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author: ouyangan
@@ -35,6 +37,10 @@ public class SysUserServiceImpl implements SysUserService {
     private SysRoleMapper sysRoleMapper;
     @Autowired
     private SysUserRoleOrganizationMapper sysUserRoleOrganizationMapper;
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
+    @Autowired
+    private SysRolePermissionMapper sysRolePermissionMapper;
     @Autowired
     private SysUserPermissionMapper sysUserPermissionMapper;
     @Autowired
@@ -150,11 +156,21 @@ public class SysUserServiceImpl implements SysUserService {
         log.debug("sessionId is:{}", id.toString());
         LoginInfo loginInfo = new LoginInfo();
         BeanUtils.copyProperties(user, loginInfo);
-        List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());
+      /*  List<SysUserPermission> userPermissions = sysUserPermissionMapper.selectByUserId(user.getId());
         List<SysPermission> permissions = new ArrayList<>();
         for (SysUserPermission userPermission : userPermissions) {
             SysPermission sysPermission = sysPermissionMapper.selectById(userPermission.getSysPermissionId());
             permissions.add(sysPermission);
+        }*/
+        List<SysPermission> permissions = new ArrayList<>();
+        List<SysUserRole> userRoles = sysUserRoleMapper.selectByUserId(user.getId());
+        for (SysUserRole userRole : userRoles) {
+            SysRole sysRole = sysRoleMapper.selectById(userRole.getSysRoleId());
+            List<SysRolePermission> sysRolePermissions = sysRolePermissionMapper.selectByRoleId(sysRole.getId());
+            for (SysRolePermission sysRolePermission : sysRolePermissions) {
+                SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
+                permissions.add(sysPermission);
+            }
         }
        /* List<SysUserRoleOrganization> userRoleOrganizations = sysUserRoleOrganizationMapper.selectByUserId(user.getId());
         loginInfo.setJobs(userRoleOrganizations);*/

@@ -101,6 +101,7 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "删除用户", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("userMsg:Remove")
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Result delete(@RequestBody Map<String, Object> params) {
         Integer id = Integer.valueOf(params.get("id").toString());
@@ -239,7 +240,7 @@ public class UserController extends BaseController {
      */
 
     @ApiOperation(value = "禁用账户", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /* @RequiresPermissions("user:forbidden")*/
+    @RequiresPermissions("userMsg:Disable")
     @ResponseBody
     @RequestMapping(value = "forbiddenUser", method = RequestMethod.POST)
     public Result forbiddenUser(@RequestBody Map<String, Object> params) {
@@ -261,7 +262,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "启用账户", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /*@RequiresPermissions("user:enable")*/
+    @RequiresPermissions("userMsg:Enable")
     @ResponseBody
     @RequestMapping(value = "enableUser", method = RequestMethod.POST)
     public Result enableUser(@RequestBody Map<String, Object> params) {
