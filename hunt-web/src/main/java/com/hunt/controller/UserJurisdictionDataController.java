@@ -11,6 +11,7 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -81,6 +82,7 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermission.setCode(permissionCode);
         sysPermission.setDescription(permissionDescription);
         sysPermission.setIsFinal(isFinal);
+        sysPermission.setCreateTime(new Date());
         sysPermission.setSysPermissionGroupId(groupId);
         sysPermissionService.insertPermission(sysPermission);
         return Result.success();
@@ -120,6 +122,7 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermission.setCode(permissionCode);
         sysPermission.setDescription(permissionDescription);
         sysPermission.setSysPermissionGroupId(groupId);
+        sysPermission.setUpdateTime(new Date());
         sysPermissionService.update(sysPermission);
         return Result.success();
     }
