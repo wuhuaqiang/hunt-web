@@ -139,6 +139,7 @@ public class SelectUserRoleMenuController extends BaseController {
      */
     @ApiOperation(value = "查询用户列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
     @ResponseBody
+    @RequiresPermissions("userMsg:Query")
     @RequestMapping(value = "listUser", method = RequestMethod.POST)
     public Result listUser(@RequestBody Map<String, Object> params) {
         int page = Integer.valueOf((String) params.get("page"));
@@ -162,6 +163,7 @@ public class SelectUserRoleMenuController extends BaseController {
      */
     @ApiOperation(value = "角色列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
     @ResponseBody
+    @RequiresPermissions("roleMsg:Query")
     @RequestMapping(value = "/listRole", method = RequestMethod.POST)
     public Result listRole(@RequestBody Map<String, Object> params) {
         /*  PageInfo pageInfo = sysRoleService.selectPage(page, rows);*/
@@ -177,6 +179,7 @@ public class SelectUserRoleMenuController extends BaseController {
      */
     @ApiOperation(value = "查询权限列表", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("permissionMsg:Query")
     @RequestMapping(value = "listAllPermission", method = RequestMethod.POST)
     public Result listAllPermission() {
         List list = sysPermissionService.listAllPermission();

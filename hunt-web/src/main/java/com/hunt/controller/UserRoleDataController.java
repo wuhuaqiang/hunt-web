@@ -1,13 +1,11 @@
 package com.hunt.controller;
 
 import com.hunt.model.entity.SysPermissionGroup;
-import com.hunt.model.entity.SysRoleOrganization;
 import com.hunt.model.entity.SysUserRole;
-import com.hunt.model.entity.SysUserRoleOrganization;
-import com.hunt.service.SysRoleOrganizationService;
 import com.hunt.service.UserRoleDataService;
 import com.hunt.util.Result;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +33,7 @@ public class UserRoleDataController extends BaseController {
      */
     @ApiOperation(value = "设置用户角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("userMsg:EditRole")
     @RequestMapping(value = "/setUserRole", method = RequestMethod.POST)
     public Result setUserRole(@RequestBody Map<String, Object> map) {
         Result result = null;
@@ -59,6 +58,7 @@ public class UserRoleDataController extends BaseController {
      */
     @ApiOperation(value = "添加角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("menuMsg:Add")
     @RequestMapping(value = "/addSysPermissionGroup", method = RequestMethod.POST)
     public Result addSysPermissionGroup(@RequestBody Map<String, Object> map) {
         Result result = null;
@@ -106,6 +106,7 @@ public class UserRoleDataController extends BaseController {
      */
     @ApiOperation(value = "查询角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("menuMsg:Query")
     @RequestMapping(value = "/selectAll", method = RequestMethod.POST)
     public Result selectAll() {
         Result result = null;
@@ -127,6 +128,7 @@ public class UserRoleDataController extends BaseController {
      */
     @ApiOperation(value = "查询角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("menuMsg:Query")
     @RequestMapping(value = "/selectPage", method = RequestMethod.POST)
     public Result selectPage(@RequestBody Map<String, Object> map) {
         Result result = null;
@@ -151,6 +153,7 @@ public class UserRoleDataController extends BaseController {
      */
     @ApiOperation(value = "更新角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("menuMsg:Edit")
     @RequestMapping(value = "/updateSysPermissionGroup", method = RequestMethod.POST)
     public Result updateSysPermissionGroup(@RequestBody SysPermissionGroup sysPermissionGroup) {
         Result result = null;
@@ -173,6 +176,7 @@ public class UserRoleDataController extends BaseController {
      */
     @ApiOperation(value = "删除角色信息", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("menuMsg:Remove")
     @RequestMapping(value = "/deleteSysPermissionGroup", method = RequestMethod.POST)
     public Result deleteSysPermissionGroup(@RequestBody Map<String, Object> map) {
         Result result = null;

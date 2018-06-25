@@ -31,6 +31,7 @@ public class UserJurisdictionDataController extends BaseController {
      * @return
      */
     @RequestMapping(value = "page", method = RequestMethod.POST)
+    @RequiresPermissions("permissionMsg:Query")
     public Result PermissionPage(@RequestBody Map<String, Object> params) {
         Result result=null;
         try {
@@ -57,6 +58,7 @@ public class UserJurisdictionDataController extends BaseController {
      * @return
      */
     @ApiOperation(value = "新增权限", httpMethod = "POST", produces = "application/json", response = Result.class)
+    @RequiresPermissions("permissionMsg:Add")
     @RequestMapping(value = "insertPermission", method = RequestMethod.POST)
     public Result insert(@RequestBody Map<String, Object> params ) {
         Integer groupId=  Integer.parseInt(params.get("groupId").toString());
@@ -91,7 +93,7 @@ public class UserJurisdictionDataController extends BaseController {
      */
     @ApiOperation(value = "更新权限", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
-   /* @RequiresPermissions("permission:update")*/
+    @RequiresPermissions("permissionMsg:Edit")
     @RequestMapping(value = "updatePermission", method = RequestMethod.POST)
     public Result update(@RequestBody Map<String, Object> params) {
         Integer id=  Integer.parseInt(params.get("id").toString());
@@ -129,7 +131,7 @@ public class UserJurisdictionDataController extends BaseController {
      * @return
      */
     @ApiOperation(value = "删除权限", httpMethod = "POST", produces = "application/json", response = Result.class)
-   /* @RequiresPermissions("permission:delete")*/
+    @RequiresPermissions("permissionMsg:Remove")
     @RequestMapping(value = "deletePermission", method = RequestMethod.POST)
     public Result deletePermission(@RequestBody Map<String, Object> params) {
         Integer id=  Integer.parseInt(params.get("id").toString());

@@ -192,7 +192,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "查询日志列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
-    /*  @RequiresPermissions("log:list")*/
+    @RequiresPermissions("systemLogMsg:Query")
     @ResponseBody
     @RequestMapping(value = "log/list", method = RequestMethod.POST)
     public Result logList(@RequestBody Map<String, Object> params) {
@@ -394,7 +394,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "插入ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /*  @RequiresPermissions("ip:insert")*/
+    @RequiresPermissions("iPAccessControlMsg:Add")
     @ResponseBody
     @RequestMapping(value = "ip/insert", method = RequestMethod.POST)
     public Result ipInsert(@RequestBody Map<String, Object> params) throws ParseException {
@@ -420,7 +420,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "删除ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /*@RequiresPermissions("ip:delete")*/
+    @RequiresPermissions("iPAccessControlMsg:Remove")
     @ResponseBody
     @RequestMapping(value = "ip/delete", method = RequestMethod.POST)
     public Result ipDelete(@RequestBody Map<String, Object> params) {
@@ -436,7 +436,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新ip", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /* @RequiresPermissions("ip:update")*/
+    @RequiresPermissions("iPAccessControlMsg:Edit")
     @ResponseBody
     @RequestMapping(value = "ip/update", method = RequestMethod.POST)
     public Result ipUpdate(@RequestBody Map<String, Object> params) throws ParseException {
@@ -464,7 +464,7 @@ public class SystemController extends BaseController {
      * @return
      */
     @ApiOperation(value = "查询ip列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
-    /* @RequiresPermissions("ip:list")*/
+    @RequiresPermissions("iPAccessControlMsg:Query")
     @ResponseBody
     @RequestMapping(value = "ip/list", method = RequestMethod.POST)
     public Result ipSelect(@RequestBody Map<String, Object> params) {
@@ -482,6 +482,7 @@ public class SystemController extends BaseController {
 
     @ApiOperation(value = "ip拦截开关", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
+    @RequiresPermissions("iPAccessControlMsg:IpSwitch")
     @RequestMapping(value = "ip/intercept", method = RequestMethod.POST)
     public Result intercept(@RequestBody Map<String, Object> params) {
         boolean open = (boolean) params.get("open");

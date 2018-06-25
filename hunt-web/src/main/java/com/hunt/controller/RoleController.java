@@ -47,7 +47,7 @@ public class RoleController extends BaseController {
      * @return
      */
     @ApiOperation(value = "新增角色", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /*  @RequiresPermissions("role:insert")*/
+    @RequiresPermissions("roleMsg:Add")
     @ResponseBody
     @RequestMapping(value = "insert", method = RequestMethod.POST)
     public Result insert(@RequestBody Map<String, Object> params) {
@@ -74,7 +74,7 @@ public class RoleController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新角色", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /* @RequiresPermissions("role:update")*/
+    @RequiresPermissions("roleMsg:Edit")
     @ResponseBody
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public Result update(@RequestBody Map<String, Object> params) {
@@ -109,7 +109,7 @@ public class RoleController extends BaseController {
      * @return
      */
     @ApiOperation(value = "删除角色", httpMethod = "POST", produces = "application/json", response = Result.class)
-    /* @RequiresPermissions("role:delete")*/
+    @RequiresPermissions("roleMsg:Remove")
     @ResponseBody
     @RequestMapping(value = "delete", method = RequestMethod.POST)
     public Result delete(@RequestBody Map<String, Object> params) {
@@ -135,6 +135,7 @@ public class RoleController extends BaseController {
      */
     @ApiOperation(value = "角色列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
     @ResponseBody
+    @RequiresPermissions("roleMsg:Query")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Result list(@RequestBody Map<String, Object> params) {
         /*  PageInfo pageInfo = sysRoleService.selectPage(page, rows);*/

@@ -164,7 +164,7 @@ public class PermissionController extends BaseController {
      */
     @ApiOperation(value = "查询分页权限列表", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
-  /*  @RequiresPermissions("permission:list")*/
+    @RequiresPermissions("permissionMsg:Query")
     @RequestMapping(value = "page", method = RequestMethod.POST)
     public Result PermissionPage(@RequestBody Map<String, Object> params) {
         int page = Integer.parseInt(params.get("page").toString());
