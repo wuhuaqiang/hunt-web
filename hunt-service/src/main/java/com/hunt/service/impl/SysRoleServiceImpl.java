@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -128,6 +129,7 @@ public class SysRoleServiceImpl implements SysRoleService {
             SysRolePermission sysRolePermission = new SysRolePermission();
             sysRolePermission.setSysRoleId(sysRole.getId());
             sysRolePermission.setSysPermissionId(Integer.valueOf(pIds[i]));
+            sysRolePermission.setUpdateTime(new Date());
             sysRolePermissionMapper.insert(sysRolePermission);
         }
     }
