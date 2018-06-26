@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author: ouyangan
@@ -182,6 +179,8 @@ public class SysUserServiceImpl implements SysUserService {
         newLoginStatus.setSessionId(id.toString());
         newLoginStatus.setSessionExpires(new DateTime().plusDays(30).toDate());
         newLoginStatus.setPlatform(platform);
+        newLoginStatus.setCreateTime(new Date());
+        newLoginStatus.setLastLoginTime(new Date());
         SysLoginStatus oldLoginStatus = sysLoginStatusMapper.selectByUserIdAndPlatform(user.getId(), platform);
         if (oldLoginStatus != null) {
             if (!oldLoginStatus.getSessionId().equals(id.toString())) {

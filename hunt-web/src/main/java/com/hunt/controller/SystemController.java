@@ -101,10 +101,10 @@ public class SystemController extends BaseController {
      *
      * @return
      */
-    @ApiOperation(value = "退出", httpMethod = "GET", produces = "application/json", response = Result.class)
+    @ApiOperation(value = "退出", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
-    @RequestMapping(value = "logout", method = RequestMethod.GET)
-    public Result logout() {
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    public Result logout(@RequestBody Map<String, Object> params) {
         SecurityUtils.getSubject().logout();
         return Result.success();
     }
