@@ -15,9 +15,9 @@
         PG.name menuName,
         p.name permissionName,
         case
-        when instr(p.CODE,'list') = 0 then
+        when instr(p.CODE,':Query') = 0 then
         0
-        when instr(p.CODE,'list') &lt;&gt; 0 then
+        when instr(p.CODE,':Query') &lt;&gt; 0 then
         1
         end requiredPerm
         FROM
