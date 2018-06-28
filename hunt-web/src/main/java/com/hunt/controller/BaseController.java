@@ -1,6 +1,7 @@
 package com.hunt.controller;
 
 import com.google.gson.Gson;
+import com.hunt.system.exception.ForbiddenIpException;
 import com.hunt.system.security.geetest.GeetestLib;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -68,6 +69,8 @@ public class BaseController {
         if (request.getHeader("Accept").contains("application/json")) {
             log.debug("qingqiu");
             Result result = Result.error();
+            System.out.println(exception instanceof ForbiddenIpException);
+            System.out.println();
             if (exception instanceof IncorrectCredentialsException) {
                 result = Result.instance(ResponseCode.password_incorrect.getCode(), ResponseCode.password_incorrect.getMsg());
                 //账号不存在
@@ -86,7 +89,10 @@ public class BaseController {
             } else if ((exception instanceof MethodArgumentTypeMismatchException)) {
                 result = Result.instance(ResponseCode.param_format_error.getCode(), ResponseCode.param_format_error.getMsg());
                 //ip限制
-            } else if (exception.getCause().getMessage().contains("system.exception.ForbiddenIpException")) {
+            } else if (exception instanceof ForbiddenIpException) {
+                result = Result.instance(ResponseCode.forbidden_ip.getCode(), ResponseCode.forbidden_ip.getMsg());
+                //ip限制
+            } else if (exception.getCause() != null && exception.getCause() instanceof ForbiddenIpException) {
                 result = Result.instance(ResponseCode.forbidden_ip.getCode(), ResponseCode.forbidden_ip.getMsg());
                 //其他错误
             }

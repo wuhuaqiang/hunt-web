@@ -1,6 +1,7 @@
 package com.hunt.system.log;
 
 import com.hunt.model.entity.SysLog;
+import com.hunt.tools.IPHelper;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthorizedException;
@@ -70,7 +71,7 @@ public class LogAOP {
             stringBuilder.append(" | ");
         }
         log.setParam(stringBuilder.toString());
-        log.setIp(request.getRemoteAddr());
+        log.setIp(IPHelper.getIpAddress(request));
         log.setUrl(request.getRequestURL().toString());
         log.setUserAgent(request.getHeader("user-agent"));
         log.setCreateTime(new Date());

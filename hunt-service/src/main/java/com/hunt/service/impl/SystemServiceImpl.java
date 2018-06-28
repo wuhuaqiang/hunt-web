@@ -257,9 +257,16 @@ public class SystemServiceImpl implements SystemService {
         SysDataItem sysDataItem = new SysDataItem();
         sysDataItem.setId(4);
         sysDataItem.setKeyValue("true");
-        sysDataItemMapper.update(sysDataItem);
+        SysDataItem sysDataItem1 = sysDataItemMapper.selectById(4);
+        if (sysDataItem1 == null) {
+            sysDataItemMapper.insert(sysDataItem);
+        } else {
+            sysDataItemMapper.update(sysDataItem);
+        }
+
         //删除缓存
         redisTemplate.opsForValue().getOperations().delete("3-ip_forbidden");
+        redisTemplate.opsForValue().getOperations().delete("ip_intercepter");
         List<SysIpForbidden> sysIpForbiddens = sysIpForbiddenMapper.selectAll();
         for (SysIpForbidden sysIpForbidden : sysIpForbiddens) {
             Long time = System.currentTimeMillis() - sysIpForbidden.getExpireTime().getTime();
