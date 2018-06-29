@@ -10,6 +10,8 @@ import com.hunt.model.entity.SysIpForbidden;
 import com.hunt.model.entity.SysUser;
 import com.hunt.service.SysUserService;
 import com.hunt.service.SystemService;
+import com.hunt.tools.CaptchaImgCreater;
+import com.hunt.tools.Constant;
 import com.hunt.tools.MD5Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +30,9 @@ import com.hunt.util.Result;
 import com.hunt.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -42,6 +46,7 @@ import java.util.Map;
 @RequestMapping("system")
 public class SystemController extends BaseController {
     private static final Logger log = LoggerFactory.getLogger(SystemController.class);
+
     @Autowired
     private SysUserService sysUserService;
     @Autowired
@@ -95,7 +100,6 @@ public class SystemController extends BaseController {
         log.debug("登录成功");
         return Result.success(loginInfo);
     }
-
     /**
      * 退出
      *
@@ -107,6 +111,16 @@ public class SystemController extends BaseController {
     public Result logout(@RequestBody Map<String, Object> params) {
         SecurityUtils.getSubject().logout();
         return Result.success();
+    }
+
+    @RequestMapping(value = "/captchImg", method = RequestMethod.GET)
+    public void getCaptchImg(HttpServletRequest request, HttpServletResponse response) {
+        CaptchaImgCreater captchaImgCreater = new CaptchaImgCreater(response, request);
+        try {
+            captchaImgCreater.createRandImage();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

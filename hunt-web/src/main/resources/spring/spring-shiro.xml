@@ -30,6 +30,7 @@
         <property name="filterChainDefinitions">
             <value>
                 /system/captcha=anon
+                /system/captchImg=anon
                 /static/**=anon
                 /system/logout = anon
                 /system/login=anon

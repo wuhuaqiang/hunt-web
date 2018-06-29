@@ -23,6 +23,7 @@
                     LEFT JOIN sys_permission_group syspg ON syspg.id = sysp.sys_permission_group_id
                 WHERE
                     sur.id = #{id}
+                    AND sysrp.Status = 1
                     AND sysuro.status = 1
                     AND syspg.status = 1
                     AND sysp.status = 1
