@@ -1,17 +1,16 @@
 package com.hunt.controller;
 
+import com.hunt.model.entity.*;
+import com.hunt.service.SysLoginlogService;
 import com.hunt.system.security.geetest.GeetestConfig;
 import com.hunt.system.security.geetest.GeetestLib;
 import com.hunt.model.dto.LoginInfo;
 import com.hunt.model.dto.PageInfo;
-import com.hunt.model.entity.SysDataGroup;
-import com.hunt.model.entity.SysDataItem;
-import com.hunt.model.entity.SysIpForbidden;
-import com.hunt.model.entity.SysUser;
 import com.hunt.service.SysUserService;
 import com.hunt.service.SystemService;
 import com.hunt.tools.CaptchaImgCreater;
 import com.hunt.tools.Constant;
+import com.hunt.tools.IPHelper;
 import com.hunt.tools.MD5Utils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -35,6 +34,7 @@ import javax.swing.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +51,8 @@ public class SystemController extends BaseController {
     private SysUserService sysUserService;
     @Autowired
     private SystemService systemService;
+    @Autowired
+    private SysLoginlogService sysLoginlogService;
 
     /**
      * 引导页
@@ -84,13 +86,29 @@ public class SystemController extends BaseController {
         String password = (String) params.get("password");
         String platforms = (String) params.get("platforms");
         SysUser user = sysUserService.selectByLoginName(loginName);
+        SysLoginlog sysLoginlog = new SysLoginlog();
+        String ipAddress = IPHelper.getIpAddress(request);
+        sysLoginlog.setLoginip(ipAddress);
+        sysLoginlog.setAccount(loginName);
+        sysLoginlog.setAddtime(new Date());
+        sysLoginlog.setLogintime(new Date());
         Integer platform = Integer.parseInt(platforms);
         if (user == null) {
+            sysLoginlog.setErrormsg(ResponseCode.unknown_account.getMsg());
+            sysLoginlog.setIssuccess("0");
+            sysLoginlog.setLogtype("登录");
             return Result.instance(ResponseCode.unknown_account.getCode(), ResponseCode.unknown_account.getMsg());
         }
         if (user.getStatus() == 3) {
+            sysLoginlog.setErrormsg(ResponseCode.forbidden_account.getMsg());
+            sysLoginlog.setIssuccess("0");
+            sysLoginlog.setLogtype("登录");
             return Result.instance(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
         }
+        sysLoginlog.setErrormsg("登录成功");
+        sysLoginlog.setIssuccess("1");
+        sysLoginlog.setLogtype("登录");
+        sysLoginlogService.insert(sysLoginlog);
         Subject subject = SecurityUtils.getSubject();
         subject.login(new UsernamePasswordToken(loginName, password));
         LoginInfo loginInfo = sysUserService.login(user, subject.getSession().getId(), platform);
@@ -100,6 +118,7 @@ public class SystemController extends BaseController {
         log.debug("登录成功");
         return Result.success(loginInfo);
     }
+
     /**
      * 退出
      *
@@ -108,8 +127,21 @@ public class SystemController extends BaseController {
     @ApiOperation(value = "退出", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
     @RequestMapping(value = "logout", method = RequestMethod.POST)
-    public Result logout(@RequestBody Map<String, Object> params) {
+    public Result logout(@RequestBody Map<String, Object> params, HttpServletRequest request) {
+
+        SysLoginlog sysLoginlog = new SysLoginlog();
+        String ipAddress = IPHelper.getIpAddress(request);
+        sysLoginlog.setLoginip(ipAddress);
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        String loginName = (String) principal;
+        sysLoginlog.setAccount(loginName);
+        sysLoginlog.setAddtime(new Date());
+        sysLoginlog.setLogintime(new Date());
+        sysLoginlog.setIssuccess("1");
+        sysLoginlog.setErrormsg("注销成功");
+        sysLoginlog.setLogtype("注销");
         SecurityUtils.getSubject().logout();
+        sysLoginlogService.insert(sysLoginlog);
         return Result.success();
     }
 
