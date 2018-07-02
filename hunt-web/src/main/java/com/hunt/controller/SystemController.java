@@ -1,6 +1,7 @@
 package com.hunt.controller;
 
 import com.hunt.model.entity.*;
+import com.hunt.service.SysLoginRecordsService;
 import com.hunt.service.SysLoginlogService;
 import com.hunt.system.security.geetest.GeetestConfig;
 import com.hunt.system.security.geetest.GeetestLib;
@@ -32,6 +33,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,6 +55,8 @@ public class SystemController extends BaseController {
     private SystemService systemService;
     @Autowired
     private SysLoginlogService sysLoginlogService;
+    @Autowired
+    private SysLoginRecordsService sysLoginRecordsService;
 
     /**
      * 引导页
@@ -106,6 +110,40 @@ public class SystemController extends BaseController {
             sysLoginlog.setLogtype("登录");
             sysLoginlogService.insert(sysLoginlog);
             return Result.instance(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
+        }
+        SysLoginrecordsParams sys_params = new SysLoginrecordsParams();
+        sys_params.clear();
+        sys_params.createCriteria().andAccountEqualTo(loginName);
+        List<SysLoginrecords> sysLoginrecords = sysLoginRecordsService.selectByExample(sys_params);
+        if (sysLoginrecords.size() == 0) {
+            SysLoginrecords record = new SysLoginrecords();
+            record.setAccount(loginName);
+            record.setAddtime(new Date());
+            record.setLastloginip(ipAddress);
+            record.setLogintime(new Date());
+            record.setLastlogintime(new Date());
+            record.setLoginip(ipAddress);
+            record.setLogincount(1L);
+            sysLoginRecordsService.insert(record);
+
+        } else {
+            SysLoginrecords record = sysLoginrecords.get(0);
+            long timeMillis = System.currentTimeMillis();
+            long lastlogintimeMillis = record.getLastlogintime().getTime();
+            int a = (int) ((timeMillis - lastlogintimeMillis) / (1000 * 3600 * 24));
+            if (a > 90) {
+                sysLoginlog.setErrormsg(ResponseCode.dormant_account.getMsg());
+                sysLoginlog.setIssuccess("0");
+                sysLoginlog.setLogtype("登录");
+                sysLoginlogService.insert(sysLoginlog);
+                return Result.instance(ResponseCode.dormant_account.getCode(), ResponseCode.dormant_account.getMsg());
+            }
+            record.setAccount(loginName);
+            record.setLastloginip(ipAddress);
+            record.setLastlogintime(new Date());
+            record.setLogincount(sysLoginrecords.get(0).getLogincount() + 1);
+            record.setUpdatetime(new Date());
+            sysLoginRecordsService.updateByExample(record, sys_params);
         }
         sysLoginlog.setErrormsg("登录成功");
         sysLoginlog.setIssuccess("1");

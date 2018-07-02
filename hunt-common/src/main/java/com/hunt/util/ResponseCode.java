@@ -23,7 +23,8 @@ public enum ResponseCode {
     data_not_exist(30004, "该记录不存在"),
     login_name_already_exist(30005, "该登录名已存在"),
     code_already_exist(30006, "该编码已存在"),
-    fullname_already_exist(30007, "该全称已存在");
+    fullname_already_exist(30007, "该全称已存在"),
+    dormant_account(30008, "账户已休眠");
 
     private int code;
     private String msg;

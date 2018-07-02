@@ -94,9 +94,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.hunt.model.entity.SysLoginlog" >
-    insert into SYS_LOGINLOG ("account", "id", "addTime",
-      "updateTime", "loginIp", "loginTime",
-      "isSuccess", "errorMsg", "logType"
+    insert into SYS_LOGINLOG (account, id, addTime,
+      updateTime, loginIp, loginTime,
+      isSuccess, errorMsg, logType
       )
     values (#{account,jdbcType=VARCHAR},idauto.nextval, #{addtime,jdbcType=TIMESTAMP},
       #{updatetime,jdbcType=TIMESTAMP}, #{loginip,jdbcType=VARCHAR}, #{logintime,jdbcType=TIMESTAMP}, 
