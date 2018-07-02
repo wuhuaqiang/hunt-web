@@ -97,12 +97,14 @@ public class SystemController extends BaseController {
             sysLoginlog.setErrormsg(ResponseCode.unknown_account.getMsg());
             sysLoginlog.setIssuccess("0");
             sysLoginlog.setLogtype("登录");
+            sysLoginlogService.insert(sysLoginlog);
             return Result.instance(ResponseCode.unknown_account.getCode(), ResponseCode.unknown_account.getMsg());
         }
-        if (user.getStatus() == 3) {
+        if (user.getStatus() == 0) {
             sysLoginlog.setErrormsg(ResponseCode.forbidden_account.getMsg());
             sysLoginlog.setIssuccess("0");
             sysLoginlog.setLogtype("登录");
+            sysLoginlogService.insert(sysLoginlog);
             return Result.instance(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
         }
         sysLoginlog.setErrormsg("登录成功");
@@ -138,8 +140,8 @@ public class SystemController extends BaseController {
         sysLoginlog.setAddtime(new Date());
         sysLoginlog.setLogintime(new Date());
         sysLoginlog.setIssuccess("1");
-        sysLoginlog.setErrormsg("注销成功");
         sysLoginlog.setLogtype("注销");
+        sysLoginlog.setErrormsg("注销成功");
         SecurityUtils.getSubject().logout();
         sysLoginlogService.insert(sysLoginlog);
         return Result.success();
