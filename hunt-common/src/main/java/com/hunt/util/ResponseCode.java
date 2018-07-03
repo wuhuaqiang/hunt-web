@@ -24,7 +24,8 @@ public enum ResponseCode {
     login_name_already_exist(30005, "该登录名已存在"),
     code_already_exist(30006, "该编码已存在"),
     fullname_already_exist(30007, "该全称已存在"),
-    dormant_account(30008, "账户已休眠");
+    dormant_account(30008, "账户已休眠"),
+    account_expiration(30009,"帐号已过期");
 
     private int code;
     private String msg;

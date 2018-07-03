@@ -111,10 +111,20 @@ public class SystemController extends BaseController {
             sysLoginlogService.insert(sysLoginlog);
             return Result.instance(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
         }
+        if(user.getExpiryTime()!=null){
+            if(user.getExpiryTime().getTime()<System.currentTimeMillis()){
+                sysLoginlog.setErrormsg(ResponseCode.account_expiration.getMsg());
+                sysLoginlog.setIssuccess("0");
+                sysLoginlog.setLogtype("登录");
+                sysLoginlogService.insert(sysLoginlog);
+                return Result.instance(ResponseCode.account_expiration.getCode(), ResponseCode.account_expiration.getMsg());
+            }
+        }
         SysLoginrecordsParams sys_params = new SysLoginrecordsParams();
         sys_params.clear();
         sys_params.createCriteria().andAccountEqualTo(loginName);
         List<SysLoginrecords> sysLoginrecords = sysLoginRecordsService.selectByExample(sys_params);
+
         if (sysLoginrecords.size() == 0) {
             SysLoginrecords record = new SysLoginrecords();
             record.setAccount(loginName);

@@ -6,6 +6,7 @@ import com.hunt.model.entity.SysPermission;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,7 +40,29 @@ public class LoginInfo implements Serializable {
     private String phone;
 
     // address :地址
+
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Date getPasswordUpdateTime() {
+        return passwordUpdateTime;
+    }
+
+    public void setPasswordUpdateTime(Date passwordUpdateTime) {
+        this.passwordUpdateTime = passwordUpdateTime;
+    }
+
     private String address;
+
+    // EXPIRY_TIME :到期时间
+    private java.util.Date expiryTime;
+    // PASSWORD_UPDATE_TIME :密码最新设置时间
+    private java.util.Date passwordUpdateTime;
 
     private List<SysUserRole> jobs = new ArrayList<>();
 
