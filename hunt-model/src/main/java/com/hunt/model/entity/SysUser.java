@@ -1,5 +1,7 @@
 package com.hunt.model.entity;
 
+import java.util.Date;
+
 /**
  * @Author: ouyangan
  * @Date: 2016-10-17 16:52
@@ -60,7 +62,27 @@ public class SysUser {
 
     // is_final :是否能修改
     private Integer isFinal;
+    // EXPIRY_TIME :到期时间
+    private java.util.Date expiryTime;
+    // PASSWORD_UPDATE_TIME :密码最新设置时间
+    private java.util.Date passwordUpdateTime;
 
+
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Date getPasswordUpdateTime() {
+        return passwordUpdateTime;
+    }
+
+    public void setPasswordUpdateTime(Date passwordUpdateTime) {
+        this.passwordUpdateTime = passwordUpdateTime;
+    }
 
     /**
      * get 登陆名

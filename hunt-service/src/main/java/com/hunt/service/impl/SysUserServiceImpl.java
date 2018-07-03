@@ -140,6 +140,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public void updateUser(SysUser user) {
+        user.setUpdateTime(new Date());
         sysUserMapper.update(user);
     }
 

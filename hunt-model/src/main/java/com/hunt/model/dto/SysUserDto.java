@@ -5,6 +5,7 @@ import com.hunt.model.entity.SysUserRoleOrganization;
 import com.hunt.model.entity.SysPermission;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,6 +68,26 @@ public class SysUserDto {
 
     // is_final :是否能修改
     private Integer isFinal;
+    // EXPIRY_TIME :到期时间
+    private java.util.Date expiryTime;
+    // PASSWORD_UPDATE_TIME :密码最新设置时间
+    private java.util.Date passwordUpdateTime;
+
+    public Date getExpiryTime() {
+        return expiryTime;
+    }
+
+    public void setExpiryTime(Date expiryTime) {
+        this.expiryTime = expiryTime;
+    }
+
+    public Date getPasswordUpdateTime() {
+        return passwordUpdateTime;
+    }
+
+    public void setPasswordUpdateTime(Date passwordUpdateTime) {
+        this.passwordUpdateTime = passwordUpdateTime;
+    }
 
     private List<SysPermission> permissions = new ArrayList<>();
     private List<SysUserRoleOrganization> userRoleOrganizations = new ArrayList<>();

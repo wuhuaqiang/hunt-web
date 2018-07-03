@@ -179,7 +179,7 @@ public class SelectUserRoleMenuController extends BaseController {
      */
     @ApiOperation(value = "查询权限列表", httpMethod = "POST", produces = "application/json", response = Result.class)
     @ResponseBody
-    @RequiresPermissions("permissionMsg:Query")
+    /*@RequiresPermissions("permissionMsg:Query")*/
     @RequestMapping(value = "listAllPermission", method = RequestMethod.POST)
     public Result listAllPermission() {
         List list = sysPermissionService.listAllPermission();

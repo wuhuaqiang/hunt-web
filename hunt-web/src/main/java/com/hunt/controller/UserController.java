@@ -17,6 +17,7 @@ import com.hunt.util.ResponseCode;
 import com.hunt.util.Result;
 import com.hunt.util.StringUtil;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -208,7 +209,7 @@ public class UserController extends BaseController {
      * @return
      */
     @ApiOperation(value = "更新密码", httpMethod = "POST", produces = "application/json", response = Result.class)
-    @RequiresPermissions("user:updatePassword")
+    @RequiresPermissions("userMsg:EditPassword")
     @ResponseBody
     @RequestMapping(value = "updatePassword", method = RequestMethod.POST)
     public Result updatePassword(@RequestBody Map<String, Object> params) {
@@ -228,6 +229,7 @@ public class UserController extends BaseController {
         String salt = UUID.randomUUID().toString().replaceAll("-", "");
         user.setPasswordSalt(salt);
         user.setPassword(StringUtil.createPassword(newPassword, salt, 2));
+        user.setPasswordUpdateTime(new Date());
         sysUserService.updateUser(user);
         return Result.success();
     }

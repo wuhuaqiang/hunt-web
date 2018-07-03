@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -75,6 +76,8 @@ public class SelectUserRoleMenuSerivelmpl implements SelectUserRoleMenuService {
      */
     @Override
     public void userInsert(SysUser sysUser) {
+        sysUser.setCreateTime(new Date());
+        sysUser.setPasswordUpdateTime(new Date());
         sysUserMapper.insert(sysUser);
      }
 }
