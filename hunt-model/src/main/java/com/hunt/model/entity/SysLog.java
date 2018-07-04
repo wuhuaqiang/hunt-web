@@ -25,6 +25,11 @@ public class SysLog {
     // update_by :更热人
     private Integer updateBy;
 
+    //创建人名字
+    private String createName;
+    //更新人名字
+    private String updateName;
+
     // status :数据状态,1:正常,2:删除
     private Integer status;
 
@@ -51,6 +56,22 @@ public class SysLog {
 
     // user_agent :请求ua标识
     private String userAgent;
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
 
     /**
      * get 主键

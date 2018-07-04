@@ -62,6 +62,10 @@ public class SysUserDto {
 
     // update_by :更热人
     private Integer updateBy;
+    //创建人名字
+    private String createName;
+    //更新人名字
+    private String updateName;
 
     // status :数据状态,1:正常,2:删除,3:禁用账号
     private Integer status;
@@ -72,6 +76,22 @@ public class SysUserDto {
     private java.util.Date expiryTime;
     // PASSWORD_UPDATE_TIME :密码最新设置时间
     private java.util.Date passwordUpdateTime;
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
 
     public Date getExpiryTime() {
         return expiryTime;

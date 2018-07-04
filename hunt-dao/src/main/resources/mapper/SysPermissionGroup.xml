@@ -14,6 +14,8 @@
         <result column="update_by" property="updateBy" jdbcType="BIGINT"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="MENU_CODE" property="menuCode" jdbcType="VARCHAR"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
     </resultMap>
     <!--  -->
     <sql id="sql_column">
@@ -205,11 +207,14 @@
     </select>
 
     <select id="selectAll" resultType="SysPermissionGroup" parameterType="string">
-        SELECT *
-        FROM sys_permission_group
-        WHERE status = 1
+        SELECT
+            gr.*
+            ,(select u.Zh_Name from sys_user u where u.id = gr.Create_By) create_name
+            ,(select u.Zh_Name from sys_user u where u.id = gr.Update_by) update_name
+        FROM sys_permission_group gr
+        WHERE gr.status = 1
         <if test="name !=null and name.length() != 0">
-        AND name like concat(concat('%',#{name}),'%')
+        AND gr.name like concat(concat('%',#{name}),'%')
         </if>
     </select>
 

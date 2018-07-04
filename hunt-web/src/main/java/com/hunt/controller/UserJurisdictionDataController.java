@@ -1,5 +1,6 @@
 package com.hunt.controller;
 
+import com.hunt.model.dto.LoginInfo;
 import com.hunt.model.dto.PageInfo;
 import com.hunt.model.entity.SysPermission;
 import com.hunt.service.SysPermissionService;
@@ -7,7 +8,9 @@ import com.hunt.util.ResponseCode;
 import com.hunt.util.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,33 +24,35 @@ import java.util.Map;
  */
 @Api(value = "用户菜单")
 @RestController
-@RequestMapping(value="userjurisdictiondata", method = RequestMethod.POST, produces = "application/json")
+@RequestMapping(value = "userjurisdictiondata", method = RequestMethod.POST, produces = "application/json")
 public class UserJurisdictionDataController extends BaseController {
-     @Resource
+    @Resource
     private SysPermissionService sysPermissionService;
 
     /**
      * 查询角色权限
+     *
      * @param params
      * @return
      */
     @RequestMapping(value = "page", method = RequestMethod.POST)
     @RequiresPermissions("permissionMsg:Query")
     public Result PermissionPage(@RequestBody Map<String, Object> params) {
-        Result result=null;
+        Result result = null;
         try {
             int page = Integer.parseInt(params.get("page").toString());
             int rows = Integer.parseInt(params.get("rows").toString());
             String name = (String) params.get("name");
-            PageInfo pageInfo = sysPermissionService.selectPage(page, rows,name);
-            result=  Result.success(pageInfo);
-            return  result;
-        }catch (Exception e){
+            PageInfo pageInfo = sysPermissionService.selectPage(page, rows, name);
+            result = Result.success(pageInfo);
+            return result;
+        } catch (Exception e) {
             e.printStackTrace();
-            result= Result.error();
+            result = Result.error();
         }
         return result;
     }
+
     /**
      * 新增权限
      * groupId     权限组id
@@ -55,18 +60,19 @@ public class UserJurisdictionDataController extends BaseController {
      * permissionCode 编码
      * permissionDescription 描述
      * isFinal 是否可修改 1表示可以修改
+     *
      * @param params
      * @return
      */
     @ApiOperation(value = "新增权限", httpMethod = "POST", produces = "application/json", response = Result.class)
     @RequiresPermissions("permissionMsg:Add")
     @RequestMapping(value = "insertPermission", method = RequestMethod.POST)
-    public Result insert(@RequestBody Map<String, Object> params ) {
-        Integer groupId=  Integer.parseInt(params.get("groupId").toString());
-        String permissionName= params.get("permissionName").toString();
-        String permissionCode=params.get("permissionCode").toString();
-        String permissionDescription= params.get("permissionDescription").toString();
-        Integer isFinal=Integer.parseInt(params.get("isFinal").toString());
+    public Result insert(@RequestBody Map<String, Object> params) {
+        Integer groupId = Integer.parseInt(params.get("groupId").toString());
+        String permissionName = params.get("permissionName").toString();
+        String permissionCode = params.get("permissionCode").toString();
+        String permissionDescription = params.get("permissionDescription").toString();
+        Integer isFinal = Integer.parseInt(params.get("isFinal").toString());
         boolean isExistName = sysPermissionService.isExistName(groupId, permissionName);
         boolean isExistCode = sysPermissionService.isExistCode(groupId, permissionCode);
         System.out.println(isExistName);
@@ -84,9 +90,14 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermission.setIsFinal(isFinal);
         sysPermission.setCreateTime(new Date());
         sysPermission.setSysPermissionGroupId(groupId);
+        Subject subject = SecurityUtils.getSubject();
+        LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+        Integer userId = loginInfo.getId();
+        sysPermission.setCreateBy(userId);
         sysPermissionService.insertPermission(sysPermission);
         return Result.success();
     }
+
     /**
      * 更新权限
      *
@@ -98,11 +109,11 @@ public class UserJurisdictionDataController extends BaseController {
     @RequiresPermissions("permissionMsg:Edit")
     @RequestMapping(value = "updatePermission", method = RequestMethod.POST)
     public Result update(@RequestBody Map<String, Object> params) {
-        Integer id=  Integer.parseInt(params.get("id").toString());
-        Integer groupId=  Integer.parseInt(params.get("groupId").toString());
-        String permissionName= params.get("permissionName").toString();
-        String permissionCode=params.get("permissionCode").toString();
-        String permissionDescription= params.get("permissionDescription").toString();
+        Integer id = Integer.parseInt(params.get("id").toString());
+        Integer groupId = Integer.parseInt(params.get("groupId").toString());
+        String permissionName = params.get("permissionName").toString();
+        String permissionCode = params.get("permissionCode").toString();
+        String permissionDescription = params.get("permissionDescription").toString();
         SysPermission sysPermission = sysPermissionService.selectById(id);
         if (sysPermission == null) {
             return Result.error(ResponseCode.data_not_exist.getMsg());
@@ -123,6 +134,10 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermission.setDescription(permissionDescription);
         sysPermission.setSysPermissionGroupId(groupId);
         sysPermission.setUpdateTime(new Date());
+        Subject subject = SecurityUtils.getSubject();
+        LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+        Integer userId = loginInfo.getId();
+        sysPermission.setUpdateBy(userId);
         sysPermissionService.update(sysPermission);
         return Result.success();
     }
@@ -130,14 +145,15 @@ public class UserJurisdictionDataController extends BaseController {
 
     /**
      * 删除权限
-     *  id
+     * id
+     *
      * @return
      */
     @ApiOperation(value = "删除权限", httpMethod = "POST", produces = "application/json", response = Result.class)
     @RequiresPermissions("permissionMsg:Remove")
     @RequestMapping(value = "deletePermission", method = RequestMethod.POST)
     public Result deletePermission(@RequestBody Map<String, Object> params) {
-        Integer id=  Integer.parseInt(params.get("id").toString());
+        Integer id = Integer.parseInt(params.get("id").toString());
         SysPermission sysPermission = sysPermissionService.selectById(id);
         if (sysPermission == null) {
             return Result.error(ResponseCode.data_not_exist.getMsg());
@@ -150,9 +166,6 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermissionService.update(sysPermission);
         return Result.success();
     }
-
-
-
 
 
 }

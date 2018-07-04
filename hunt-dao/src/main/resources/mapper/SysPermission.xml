@@ -36,6 +36,8 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="create_by" property="createBy" jdbcType="BIGINT"/>
         <result column="update_by" property="updateBy" jdbcType="BIGINT"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
     </resultMap>
     <!--  -->
@@ -224,13 +226,17 @@
     </select>
 
     <select id="selectAll" resultType="SysPermission" parameterType="string">
-        SELECT *
-        FROM sys_permission
-        WHERE status = 1
+        SELECT
+            p.*
+            ,(select u.Zh_Name from sys_user u where u.id = P.Create_By) create_name
+            ,(select u.Zh_Name from sys_user u where u.id = P.Update_by) update_name
+        FROM
+        sys_permission p
+        WHERE p.status = 1
         <if test="name !=null and name.length() != 0">
-        AND name like concat(concat('%',#{name}),'%')
+            AND p.name like concat(concat('%',#{name}),'%')
         </if>
-        ORDER BY sys_permission_group_id,ID
+        ORDER BY p.sys_permission_group_id,p.ID
     </select>
 
     <select id="selectCounts" resultType="integer" parameterType="string">

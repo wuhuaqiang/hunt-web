@@ -233,6 +233,42 @@ public class UserController extends BaseController {
         sysUserService.updateUser(user);
         return Result.success();
     }
+    /**
+     * 更新密码
+     *
+     * @param params 参数
+     * @return
+     */
+    @ApiOperation(value = "更新密码", httpMethod = "POST", produces = "application/json", response = Result.class)
+    @ResponseBody
+    @RequestMapping(value = "updatePasswordByUser", method = RequestMethod.POST)
+    public Result updatePasswordByUser(@RequestBody Map<String, Object> params) {
+        Integer id = Integer.valueOf(params.get("id").toString());
+        String oldPassword = params.get("oldPassword").toString();
+        String newPassword = params.get("newPassword").toString();
+        String repeatNewPassword = params.get("repeatNewPassword").toString();
+        if ((!StringUtils.hasText(newPassword)) && newPassword.length() < 6) {
+            return Result.error("请设置密码长度大于等于6");
+        }
+        if (!newPassword.equals(repeatNewPassword)) {
+            return Result.error("两次输入的密码不一致!");
+        }
+        SysUser user = sysUserService.selectById(id);
+        oldPassword = StringUtil.createPassword(oldPassword, user.getPasswordSalt(), 2);
+        if (!oldPassword.equals(user.getPassword())) {
+            return Result.error(ResponseCode.oldpassword_error.getMsg());
+        }
+        String newPasswordSur = StringUtil.createPassword(newPassword, user.getPasswordSalt(), 2);
+        if(newPasswordSur.equals(user.getPassword())){
+            return Result.error(ResponseCode.old_new_password_error.getMsg());
+        }
+        String salt = UUID.randomUUID().toString().replaceAll("-", "");
+        user.setPasswordSalt(salt);
+        user.setPassword(StringUtil.createPassword(newPassword, salt, 2));
+        user.setPasswordUpdateTime(new Date());
+        sysUserService.updateUser(user);
+        return Result.success();
+    }
 
     /**
      * 禁用账户

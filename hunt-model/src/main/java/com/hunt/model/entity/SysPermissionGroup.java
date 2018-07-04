@@ -36,6 +36,10 @@ public class SysPermissionGroup {
 
     // update_by :更新人id
     private Integer updateBy;
+    //创建人名字
+    private String createName;
+    //更新人名字
+    private String updateName;
 
     // status :数据状态,1:正常,2:删除
     private Integer status;
@@ -43,6 +47,22 @@ public class SysPermissionGroup {
      * 菜单code唯一标示
      */
     private String menuCode;
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
+    public String getUpdateName() {
+        return updateName;
+    }
+
+    public void setUpdateName(String updateName) {
+        this.updateName = updateName;
+    }
 
     public String getMenuCode() {
         return menuCode;

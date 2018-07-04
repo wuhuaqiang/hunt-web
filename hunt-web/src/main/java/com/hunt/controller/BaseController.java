@@ -3,6 +3,7 @@ package com.hunt.controller;
 import com.google.gson.Gson;
 import com.hunt.system.exception.ForbiddenIpException;
 import com.hunt.system.security.geetest.GeetestLib;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthenticatedException;
@@ -95,6 +96,8 @@ public class BaseController {
             } else if (exception.getCause() != null && exception.getCause() instanceof ForbiddenIpException) {
                 result = Result.instance(ResponseCode.forbidden_ip.getCode(), ResponseCode.forbidden_ip.getMsg());
                 //其他错误
+            } else if (exception.getCause() != null && exception.getCause() instanceof ExcessiveAttemptsException){
+                result = Result.instance(ResponseCode.lock_account.getCode(), ResponseCode.lock_account.getMsg());
             }
             //调试时输出异常日志
       /*      if (systemService.selectDataItemByKey("error_detail", 2).equals("true")) {

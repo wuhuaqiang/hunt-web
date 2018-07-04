@@ -112,7 +112,7 @@ public class SystemController extends BaseController {
             return Result.instance(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
         }
         if(user.getExpiryTime()!=null){
-            if(user.getExpiryTime().getTime()<System.currentTimeMillis()){
+            if(user.getExpiryTime().getTime()<=System.currentTimeMillis()-86400000){
                 sysLoginlog.setErrormsg(ResponseCode.account_expiration.getMsg());
                 sysLoginlog.setIssuccess("0");
                 sysLoginlog.setLogtype("登录");

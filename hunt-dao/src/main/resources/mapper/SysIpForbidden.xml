@@ -9,6 +9,8 @@
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
         <result column="create_by" property="createBy" jdbcType="BIGINT"/>
         <result column="update_by" property="updateBy" jdbcType="BIGINT"/>
+        <result column="create_name" property="createName" jdbcType="VARCHAR"/>
+        <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
         <result column="expire_time" property="expireTime" jdbcType="TIMESTAMP"/>
         <result column="description" property="description" jdbcType="VARCHAR"/>
@@ -195,9 +197,12 @@
     </select>
 
     <select id="selectAll" resultType="SysIpForbidden">
-        SELECT *
-        FROM sys_ip_forbidden
-        WHERE status = 1
+        SELECT
+            if.*
+            ,(select u.Zh_Name from sys_user u where u.id = if.Create_By) create_name
+            ,(select u.Zh_Name from sys_user u where u.id = if.Update_by) update_name
+        FROM sys_ip_forbidden if
+        WHERE if.status = 1
     </select>
 
     <select id="selectCounts" resultType="integer">

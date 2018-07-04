@@ -1,10 +1,13 @@
 package com.hunt.system.log;
 
+import com.hunt.model.dto.LoginInfo;
 import com.hunt.model.entity.SysLog;
 import com.hunt.tools.IPHelper;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authz.UnauthorizedException;
+import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -75,6 +78,10 @@ public class LogAOP {
         log.setUrl(request.getRequestURL().toString());
         log.setUserAgent(request.getHeader("user-agent"));
         log.setCreateTime(new Date());
+        Subject subject = SecurityUtils.getSubject();
+        LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+        Integer userId = loginInfo.getId();
+        log.setCreateBy(userId);
         systemService.insertSysControllerLog(log);
 
         logger.info("request contentType:{}", request.getHeader("Accept"));
