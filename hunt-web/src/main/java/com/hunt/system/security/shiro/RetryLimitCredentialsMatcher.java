@@ -4,8 +4,6 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @Auther: whq
@@ -32,16 +29,11 @@ public class RetryLimitCredentialsMatcher extends HashedCredentialsMatcher {
         ValueOperations<String, String> opsForValue = redisTemplate.opsForValue();
         if (!"LOCK".equals(opsForValue.get("longinLock" + username))) {
             String longinCount = opsForValue.get("longinCount" + username);
-            if(longinCount==null){
-                opsForValue.set("longinCount" + username,"1");
-            }else{
-                opsForValue.set("longinCount" + username,Integer.parseInt(longinCount)+1+"");
+            if (longinCount == null) {
+                opsForValue.set("longinCount" + username, "1");
+            } else {
+                opsForValue.set("longinCount" + username, Integer.parseInt(longinCount) + 1 + "");
             }
-       /* opsForValue.increment("longinCount" + username, 1);
-        opsForValue.increment("longinCount", 1);*/
-            /* opsForValue.set("longinCount","20");*/
-            /*  String countStr = opsForValue.get("longinCount");*/
-            /* String count = opsForValue.get("longinCount" + username);*/
             //计数大于5时，设置用户被锁定一小时
             if (Integer.parseInt(opsForValue.get("longinCount" + username)) >= 5) {
                 opsForValue.set("longinLock" + username, "LOCK");

@@ -23,6 +23,7 @@ import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.hunt.util.ResponseCode;
@@ -33,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.swing.*;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,6 +59,8 @@ public class SystemController extends BaseController {
     private SysLoginlogService sysLoginlogService;
     @Autowired
     private SysLoginRecordsService sysLoginRecordsService;
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
 
     /**
      * 引导页
@@ -183,6 +187,7 @@ public class SystemController extends BaseController {
         String ipAddress = IPHelper.getIpAddress(request);
         sysLoginlog.setLoginip(ipAddress);
         Object principal = SecurityUtils.getSubject().getPrincipal();
+        Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
         String loginName = (String) principal;
         sysLoginlog.setAccount(loginName);
         sysLoginlog.setAddtime(new Date());
@@ -190,6 +195,9 @@ public class SystemController extends BaseController {
         sysLoginlog.setIssuccess("1");
         sysLoginlog.setLogtype("注销");
         sysLoginlog.setErrormsg("注销成功");
+        redisTemplate.opsForValue().getOperations().delete(sessionId);
+        redisTemplate.opsForValue().getOperations().delete("shiro-cache-"+loginName);
+        redisTemplate.opsForValue().getOperations().delete("longinCount"+loginName);
         SecurityUtils.getSubject().logout();
         sysLoginlogService.insert(sysLoginlog);
         return Result.success();
@@ -331,7 +339,7 @@ public class SystemController extends BaseController {
             SysLoginlogParams sysLoginlogParams = new SysLoginlogParams();
             sysLoginlogParams.clear();
             if (account != null) {
-                sysLoginlogParams.createCriteria().andAccountLike("%"+account+"%");
+                sysLoginlogParams.createCriteria().andAccountLike("%" + account + "%");
             }
             results = Result.success(sysLoginlogService.selectByExample(sysLoginlogParams, page, rows));
         } catch (Exception e) {
