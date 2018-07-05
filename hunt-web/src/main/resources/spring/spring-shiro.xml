@@ -31,6 +31,7 @@
             <value>
                 /system/captcha=anon
                 /system/captchImg=anon
+                /druid/**=anon
                 /static/**=anon
                 /system/logout = anon
                 /system/login=anon
