@@ -1,11 +1,14 @@
 package com.hunt.controller;
 
+import com.hunt.model.dto.LoginInfo;
 import com.hunt.model.entity.SysPermissionGroup;
 import com.hunt.model.entity.SysUserRole;
 import com.hunt.service.UserRoleDataService;
 import com.hunt.util.Result;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -86,6 +89,10 @@ public class UserRoleDataController extends BaseController {
                     sysPermissionGroup.setParentId((Integer) parentId);
                 }
                 sysPermissionGroup.setStatus(Integer.parseInt(status));
+                Subject subject = SecurityUtils.getSubject();
+                LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+                Integer userId = loginInfo.getId();
+                sysPermissionGroup.setCreateBy(userId);
                 userRoleDataService.insert(sysPermissionGroup);
                 result = Result.success();
                 return result;
@@ -158,6 +165,10 @@ public class UserRoleDataController extends BaseController {
     public Result updateSysPermissionGroup(@RequestBody SysPermissionGroup sysPermissionGroup) {
         Result result = null;
         try {
+            Subject subject = SecurityUtils.getSubject();
+            LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+            Integer userId = loginInfo.getId();
+            sysPermissionGroup.setUpdateBy(userId);
             userRoleDataService.update(sysPermissionGroup);
             result = Result.success();
             return result;

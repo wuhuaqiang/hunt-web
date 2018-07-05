@@ -11,6 +11,7 @@
     <result column="isSuccess" property="issuccess" jdbcType="CHAR" />
     <result column="errorMsg" property="errormsg" jdbcType="VARCHAR" />
     <result column="logType" property="logtype" jdbcType="VARCHAR" />
+    <result column="create_name" property="createName" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -78,8 +79,9 @@
     <if test="distinct" >
       distinct
     </if>
-    <include refid="Base_Column_List" />
-    from SYS_LOGINLOG
+      LG.*
+      ，(SELECT US.ZH_NAME FROM SYS_USER US WHERE US.LOGIN_NAME  = LG.ACCOUNT) create_name
+    FROM SYS_LOGINLOG LG
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

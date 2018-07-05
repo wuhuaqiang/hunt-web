@@ -22,6 +22,16 @@ public class SysLoginlog implements Serializable {
 
     private String logtype;
 
+    private String createName;
+
+    public String getCreateName() {
+        return createName;
+    }
+
+    public void setCreateName(String createName) {
+        this.createName = createName;
+    }
+
     public String getAccount() {
         return account;
     }

@@ -63,7 +63,7 @@ public class LogAOP {
         } else {
             log.setResult("data is too long");
         }
-      Integer a =(t2.intValue() - t1.intValue());
+        Integer a = (t2.intValue() - t1.intValue());
         log.setDuration(a);
         log.setMethod(p.getTarget().getClass().getName() + "." + p.getSignature().getName());
         StringBuilder stringBuilder = new StringBuilder();
@@ -80,9 +80,12 @@ public class LogAOP {
         log.setCreateTime(new Date());
         Subject subject = SecurityUtils.getSubject();
         LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
-        Integer userId = loginInfo.getId();
-        log.setCreateBy(userId);
-        systemService.insertSysControllerLog(log);
+        if (loginInfo != null) {
+            Integer userId = loginInfo.getId();
+            log.setCreateBy(userId);
+            systemService.insertSysControllerLog(log);
+        }
+
 
         logger.info("request contentType:{}", request.getHeader("Accept"));
         logger.info("request param : {}", log.getParam());

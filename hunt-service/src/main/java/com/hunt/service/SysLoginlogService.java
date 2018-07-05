@@ -1,9 +1,8 @@
 package com.hunt.service;
 
+import com.hunt.model.dto.PageInfo;
 import com.hunt.model.entity.SysLoginlog;
 import com.hunt.model.entity.SysLoginlogParams;
-
-import java.util.List;
 
 /**
  * @Auther: whq
@@ -19,7 +18,7 @@ public interface SysLoginlogService {
 
     int insertSelective(SysLoginlog record);
 
-    List<SysLoginlog> selectByExample(SysLoginlogParams example);
+    PageInfo selectByExample(SysLoginlogParams example, Integer page, Integer rows);
 
     int updateByExampleSelective(SysLoginlog record, SysLoginlogParams example);
 

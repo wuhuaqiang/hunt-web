@@ -111,8 +111,8 @@ public class SystemController extends BaseController {
             sysLoginlogService.insert(sysLoginlog);
             return Result.instance(ResponseCode.forbidden_account.getCode(), ResponseCode.forbidden_account.getMsg());
         }
-        if(user.getExpiryTime()!=null){
-            if(user.getExpiryTime().getTime()<=System.currentTimeMillis()-86400000){
+        if (user.getExpiryTime() != null) {
+            if (user.getExpiryTime().getTime() <= System.currentTimeMillis() - 86400000) {
                 sysLoginlog.setErrormsg(ResponseCode.account_expiration.getMsg());
                 sysLoginlog.setIssuccess("0");
                 sysLoginlog.setLogtype("登录");
@@ -303,6 +303,37 @@ public class SystemController extends BaseController {
             String sort = "id";
             String order = "desc";
             results = Result.success(systemService.selectLog(page, rows, StringUtil.camelToUnderline(sort), order, method, url, param, result));
+        } catch (Exception e) {
+            e.printStackTrace();
+            results = Result.error();
+        }
+        return results;
+    }
+
+    /**
+     * 查询登录日志列表
+     *
+     * @param params 起始页码
+     * @return
+     */
+    @ApiOperation(value = "查询日志列表", httpMethod = "POST", produces = "application/json", response = PageInfo.class)
+    @RequiresPermissions("systemLoginLogMsg:Query")
+    @ResponseBody
+    @RequestMapping(value = "loginLog/list", method = RequestMethod.POST)
+    public Result loginLogList(@RequestBody Map<String, Object> params) {
+        Result results = null;
+        try {
+            Integer page = Integer.valueOf((String) params.get("page"));
+            Integer rows = Integer.valueOf((String) params.get("rows"));
+            String account = (String) params.get("account");
+            String sort = "id";
+            String order = "desc";
+            SysLoginlogParams sysLoginlogParams = new SysLoginlogParams();
+            sysLoginlogParams.clear();
+            if (account != null) {
+                sysLoginlogParams.createCriteria().andAccountLike("%"+account+"%");
+            }
+            results = Result.success(sysLoginlogService.selectByExample(sysLoginlogParams, page, rows));
         } catch (Exception e) {
             e.printStackTrace();
             results = Result.error();
@@ -504,6 +535,11 @@ public class SystemController extends BaseController {
         SysIpForbidden sysIpForbidden = new SysIpForbidden();
         sysIpForbidden.setIp(ip);
         sysIpForbidden.setExpireTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(expireTime));
+        sysIpForbidden.setCreateTime(new Date());
+        Subject subject = SecurityUtils.getSubject();
+        LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+        Integer userId = loginInfo.getId();
+        sysIpForbidden.setCreateBy(userId);
         sysIpForbidden.setDescription(description);
         Integer id = systemService.insertIp(sysIpForbidden);
         return Result.success(id);
@@ -549,6 +585,11 @@ public class SystemController extends BaseController {
         sysIpForbidden.setIp(ip);
         sysIpForbidden.setExpireTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(expireTime));
         sysIpForbidden.setDescription(description);
+        sysIpForbidden.setUpdateTime(new Date());
+        Subject subject = SecurityUtils.getSubject();
+        LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
+        Integer userId = loginInfo.getId();
+        sysIpForbidden.setUpdateBy(userId);
         systemService.updateIp(sysIpForbidden);
         return Result.success();
     }

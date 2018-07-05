@@ -1,6 +1,8 @@
 package com.hunt.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.hunt.dao.SysLoginlogMapper;
+import com.hunt.model.dto.PageInfo;
 import com.hunt.model.entity.SysLoginlog;
 import com.hunt.model.entity.SysLoginlogParams;
 import com.hunt.service.SysLoginlogService;
@@ -42,8 +44,11 @@ public class SysLoginlogServiceImpl implements SysLoginlogService {
     }
 
     @Override
-    public List<SysLoginlog> selectByExample(SysLoginlogParams example) {
-        return sysLoginlogMapper.selectByExample(example);
+    public PageInfo selectByExample(SysLoginlogParams example, Integer page, Integer rows) {
+        int counts = sysLoginlogMapper.countByExample(example);
+        PageHelper.startPage(page, rows);
+        List<SysLoginlog> list = sysLoginlogMapper.selectByExample(example);
+        return new PageInfo(counts, list);
     }
 
     @Override
