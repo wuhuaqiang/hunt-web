@@ -73,6 +73,7 @@ public class UserJurisdictionDataController extends BaseController {
         String permissionCode = params.get("permissionCode").toString();
         String permissionDescription = params.get("permissionDescription").toString();
         Integer isFinal = Integer.parseInt(params.get("isFinal").toString());
+        String requestUrl = params.get("requestUrl").toString();
         boolean isExistName = sysPermissionService.isExistName(groupId, permissionName);
         boolean isExistCode = sysPermissionService.isExistCode(groupId, permissionCode);
         System.out.println(isExistName);
@@ -89,6 +90,7 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermission.setDescription(permissionDescription);
         sysPermission.setIsFinal(isFinal);
         sysPermission.setCreateTime(new Date());
+        sysPermission.setRequestUrl(requestUrl);
         sysPermission.setSysPermissionGroupId(groupId);
         Subject subject = SecurityUtils.getSubject();
         LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
@@ -114,6 +116,7 @@ public class UserJurisdictionDataController extends BaseController {
         String permissionName = params.get("permissionName").toString();
         String permissionCode = params.get("permissionCode").toString();
         String permissionDescription = params.get("permissionDescription").toString();
+        String requestUrl = params.get("requestUrl").toString();
         SysPermission sysPermission = sysPermissionService.selectById(id);
         if (sysPermission == null) {
             return Result.error(ResponseCode.data_not_exist.getMsg());
@@ -134,6 +137,7 @@ public class UserJurisdictionDataController extends BaseController {
         sysPermission.setDescription(permissionDescription);
         sysPermission.setSysPermissionGroupId(groupId);
         sysPermission.setUpdateTime(new Date());
+        sysPermission.setRequestUrl(requestUrl);
         Subject subject = SecurityUtils.getSubject();
         LoginInfo loginInfo = (LoginInfo) subject.getSession().getAttribute("loginInfo");
         Integer userId = loginInfo.getId();

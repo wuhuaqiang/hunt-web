@@ -48,6 +48,16 @@ public class SysPermission implements Serializable {
 
     // status :数据状态,1:正常,2:删除
     private Integer status;
+    // requestUrl :请求地址
+    private String requestUrl;
+
+    public String getRequestUrl() {
+        return requestUrl;
+    }
+
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+    }
 
     public String getCreateName() {
         return createName;

@@ -3,6 +3,7 @@ package com.hunt.system.security.shiro;
 import com.hunt.dao.*;
 import com.hunt.model.entity.*;
 import com.hunt.util.SystemConstant;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,6 +58,7 @@ public class ShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         log.debug("开始查询授权信息");
+        Serializable sessionId = SecurityUtils.getSubject().getSession().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         String loginStr = (String) principalCollection.getPrimaryPrincipal();
         SysUser user = sysUserMapper.selectUserByLoginName(loginStr);
@@ -85,6 +88,7 @@ public class ShiroRealm extends AuthorizingRealm {
             for (SysRolePermission sysRolePermission : sysRolePermissions) {
                 SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
                 permissions.add(sysPermission.getCode());
+                redisTemplate.opsForSet().add(sessionId+"_Permission",sysPermission.getRequestUrl());
             }
         }
         info.addRoles(roles);

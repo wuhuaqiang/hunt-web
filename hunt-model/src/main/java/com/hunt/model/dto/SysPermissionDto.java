@@ -49,6 +49,17 @@ public class SysPermissionDto {
 
     private String sysPermissionGroupName;
 
+    // requestUrl :请求地址
+    private String requestUrl;
+
+    public String getRequestUrl() {
+        return requestUrl;
+    }
+
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+    }
+
     public String getCreateName() {
         return createName;
     }

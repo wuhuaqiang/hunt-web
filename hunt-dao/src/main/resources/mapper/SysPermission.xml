@@ -39,6 +39,7 @@
         <result column="create_name" property="createName" jdbcType="VARCHAR"/>
         <result column="update_name" property="updateName" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="request_url" property="requestUrl" jdbcType="VARCHAR"/>
     </resultMap>
     <!--  -->
     <sql id="sql_column">
@@ -53,7 +54,8 @@
         updateTime,
         createBy,
         updateBy,
-        status
+        status,
+        requestUrl
     </sql>
 
     <sql id="sql_column_where">
@@ -92,6 +94,9 @@
         </if>
         <if test="status !=null ">
             AND status = #{status}
+        </if>
+        <if test="requestUrl !=null ">
+            AND request_url = #{requestUrl}
         </if>
     </sql>
 
@@ -132,6 +137,9 @@
             <if test="status !=null">
                 status,
             </if>
+            <if test="requestUrl !=null ">
+              request_url,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             idauto.nextval,
@@ -167,6 +175,9 @@
             </if>
             <if test="status !=null">
                 #{status},
+            </if>
+            <if test="requestUrl !=null ">
+                #{requestUrl},
             </if>
         </trim>
     </insert>
@@ -207,6 +218,9 @@
             </if>
             <if test="status !=null">
                 status = #{status},
+            </if>
+            <if test="requestUrl !=null ">
+                request_url = #{requestUrl},
             </if>
         </set>
         where id =#{id} and status=1
