@@ -196,8 +196,9 @@ public class SystemController extends BaseController {
         sysLoginlog.setLogtype("注销");
         sysLoginlog.setErrormsg("注销成功");
         redisTemplate.opsForValue().getOperations().delete(sessionId);
-        redisTemplate.opsForValue().getOperations().delete("shiro-cache-"+loginName);
-        redisTemplate.opsForValue().getOperations().delete("longinCount"+loginName);
+        redisTemplate.opsForValue().getOperations().delete(sessionId + "_Permission");
+        redisTemplate.opsForValue().getOperations().delete("shiro-cache-" + loginName);
+        redisTemplate.opsForValue().getOperations().delete("longinCount" + loginName);
         SecurityUtils.getSubject().logout();
         sysLoginlogService.insert(sysLoginlog);
         return Result.success();

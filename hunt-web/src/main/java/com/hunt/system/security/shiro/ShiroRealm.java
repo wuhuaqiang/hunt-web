@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,8 +90,13 @@ public class ShiroRealm extends AuthorizingRealm {
             for (SysRolePermission sysRolePermission : sysRolePermissions) {
                 SysPermission sysPermission = sysPermissionMapper.selectById(sysRolePermission.getSysPermissionId());
                 permissions.add(sysPermission.getCode());
-                redisTemplate.opsForSet().add(sessionId+"_Permission",sysPermission.getRequestUrl());
+                String requestUrl = sysPermission.getRequestUrl();
+                if (requestUrl != null) {
+                    redisTemplate.opsForSet().add(sessionId + "_Permission", requestUrl);
+                }
+
             }
+
         }
         info.addRoles(roles);
         info.addStringPermissions(permissions);
