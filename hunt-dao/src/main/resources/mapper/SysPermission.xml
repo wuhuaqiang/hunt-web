@@ -23,6 +23,7 @@
         FROM
         sys_permission p
         JOIN SYS_PERMISSION_GROUP PG ON P.SYS_PERMISSION_GROUP_ID = PG.ID
+        WHERE p.status = 1 and PG.status = 1
     </select>
     <resultMap id="baseResultMap" type="com.hunt.model.entity.SysPermission">
         <result column="id" property="id" jdbcType="BIGINT"/>
