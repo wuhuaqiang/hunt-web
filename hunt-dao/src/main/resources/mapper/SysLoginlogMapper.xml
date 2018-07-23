@@ -80,7 +80,7 @@
       distinct
     </if>
       LG.*
-      ，(SELECT US.ZH_NAME FROM SYS_USER US WHERE US.LOGIN_NAME  = LG.ACCOUNT) create_name
+      ，(SELECT US.ZH_NAME FROM SYS_USER US WHERE US.LOGIN_NAME  = LG.ACCOUNT and US.status = 1 ) create_name
     FROM SYS_LOGINLOG LG
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
