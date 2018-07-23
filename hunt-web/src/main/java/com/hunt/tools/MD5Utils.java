@@ -23,7 +23,7 @@ public class MD5Utils {
         try {
             // 得到一个信息摘要器
             MessageDigest digest = MessageDigest.getInstance("md5");
-            byte[] result = digest.digest(LoginName.getBytes());
+            byte[] result = digest.digest(LoginName.getBytes("UTF-8"));
             StringBuffer buffer = new StringBuffer();
             // 把每一个byte 做一个与运算 0xff;
             for (byte b : result) {
@@ -39,6 +39,9 @@ public class MD5Utils {
             // 标准的md5加密后的结果
             return buffer.toString();
         } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return "";
+        }catch (Exception e) {
             e.printStackTrace();
             return "";
         }
